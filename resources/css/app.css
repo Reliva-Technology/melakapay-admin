@@ -1,0 +1,6 @@
+.login-box-body, .register-box-body {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #f3f6f9;
+    color: #666;
+}
