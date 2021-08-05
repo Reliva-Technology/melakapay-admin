@@ -24,6 +24,8 @@ Route::group([
     $router->resource('payments', PaymentController::class);
     $router->resource('profiles', ProfileController::class);
     $router->resource('scheduler', SchedulerController::class);
+    $router->resource('faqs', FaqController::class);
+    $router->resource('agency-details', AgencyDetailsController::class);
 
     $router->get('/api/service','SchedulerController@service');
 

@@ -402,15 +402,22 @@ return [
         'phpinfo' => [
             'enable' => true,
             'what' => INFO_ALL,
+        ],
+        'env-manager' => [
+            'enable' => true
+        ],
+        'material-ui' => [
+            'enable' => false
+        ],
+        'summernote' => [
+        
+            //Set to false if you want to disable this extension
+            'enable' => true,
             
-            // Set access path，defaults to `phpinfo`
-            //'path' => '~phpinfo',
-            ],
-            'env-manager' => [
-                'enable' => true
-            ],
-            'material-ui' => [
-                'enable' => false
+            // Editor configuration
+            'config' => [
+                
             ]
+        ]
     ],
 ];
