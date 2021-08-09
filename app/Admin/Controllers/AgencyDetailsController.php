@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Str;
 
 class AgencyDetailsController extends AdminController
 {
@@ -55,6 +56,7 @@ class AgencyDetailsController extends AdminController
         $show = new Show(AgencyDetails::findOrFail($id));
 
         $show->field('agency.agency_name', __('Agency'));
+        $show->field('slug', __('Slug'));
         $show->field('description', __('Description'));
         $show->logo()->image();
         $show->field('url', __('URL'));
@@ -71,10 +73,18 @@ class AgencyDetailsController extends AdminController
     {
         $form = new Form(new AgencyDetails());
 
-        $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
+        $form->select('agency_id', __('Agency'))
+            ->options(Agency::all()->pluck('agency_name','id'))
+            ->required();
+        $form->text('slug')
+            ->readonly();
         $form->summernote('description', __('Description'));
         $form->image('logo', __('Logo'));
         $form->url('url', __('URL'));
+
+        $form->saving(function (Form $form) {
+            $form->slug = Str::slug($form->slug, '-');
+        });
 
         return $form;
     }
