@@ -26,6 +26,7 @@ Route::group([
     $router->resource('scheduler', SchedulerController::class);
     $router->resource('faqs', FaqController::class);
     $router->resource('agency-details', AgencyDetailsController::class);
+    $router->resource('uploads', UploadController::class);
 
     $router->get('/api/service','SchedulerController@service');
 

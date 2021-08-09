@@ -14,6 +14,7 @@ class AgencyDetails extends Model
         'description',
         'logo',
         'url',
+        'slug',
     ];
 
     public $timestamps = true;
