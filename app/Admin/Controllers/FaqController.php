@@ -66,7 +66,7 @@ class FaqController extends AdminController
         $form = new Form(new Faq());
 
         $form->text('question', __('Question'));
-        $form->textarea('answer', __('Answer'));
+        $form->summernote('answer', __('Answer'));
         $status = [
             '0' => 'Disabled',
             '1' => 'Enabled'
