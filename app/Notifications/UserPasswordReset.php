@@ -25,10 +25,17 @@ class UserPasswordReset extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('Your password has been reset by the admin. Please check the details as below:')
-            ->line('Username: '.$this->user->username)
-            ->line('Password: '.$this->user->new_password)
-            ->line('Please contact the user immediately (if needed).');
+            ->subject('Details Changes at MelakaPay')
+            ->greeting('Dear '.$this->user->profile->name)
+            ->line('This is to inform that we have made some changes in your user profile at MelakaPay, upon your request. The account details are as below:')
+            ->formatLine('Full Name: '.$this->user->profile->name.'<br>User ID: '.$this->user->username)
+            ->line('The changes made can be found below:')
+            ->formatLine('Account Details')
+            ->line('New Password: '.$this->user->new_password)
+            ->line('If this is not your account / request, kindly contact our administrator using the contact details below the soonest:')
+            ->line('Telephone No: +606-3333333 ext 7656')
+            ->line('Email Address: melakapay_admin@melaka.gov.my')
+            ->line('Address: Bahagian Teknologi Maklumat Dan Komunikasi, Aras 1, Blok Temenggong, Seri Negeri, Hang Tuah Jaya, 75450 Ayer Keroh, Melaka MALAYSIA');
     }
 
     public function toArray($notifiable)

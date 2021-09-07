@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Box;
 use DB;
+use Carbon\Carbon;
 
 class TransactionController extends AdminController
 {
@@ -56,6 +57,13 @@ class TransactionController extends AdminController
         });
 
         $grid->disableCreateButton();
+
+        $grid->header(function ($query) {
+            $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
+                ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
+            $doughnut = view('admin.charts.user', compact('method'));
+            return new Box('Payment Menthod', $doughnut);
+        });
 
         return $grid;
     }

@@ -30,6 +30,7 @@ class ServiceController extends AdminController
         $grid->column('agency.agency_name', __('Agency'))->sortable();
         $grid->column('category', __('Category'))->sortable();
         $grid->column('sub_category', __('Search Type'))->sortable();
+        $grid->column('api_url', __('API URL'));
         $grid->column('status', __('Enabled'))->bool();
         $grid->column('created_at')->hide();
         $grid->column('updated_at', __('Updated at'))->hide();
@@ -65,6 +66,10 @@ class ServiceController extends AdminController
 
         $show->field('category', __('Category'));
         $show->field('sub_category', __('Search Type'));
+        $show->field('api_url', __('API URL'));
+        $show->field('parameter', __('Parameter'));
+        $show->field('payment_url', __('Payment URL'));
+        $show->field('payment_parameter', __('Payment Parameter'));
         $show->field('status', __('Enabled'))->using(['0' => 'No', '1' => 'Yes']);
 
         $show->agency('Agency Details', function ($agency) {
@@ -97,15 +102,18 @@ class ServiceController extends AdminController
     {
         $form = new Form(new Service());
 
-        $form->text('code', __('Code'))->required();
-        $form->text('name', __('Name'))->required();
         $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
+        $form->text('category', __('Category'))->required();
+        $form->text('sub_category', __('Sub Category'))->required();
+        $form->text('api_url', __('API URL'))->required();
+        $form->text('parameter', __('Parameter'));
+        $form->text('payment_url', __('Payment URL'));
+        $form->text('payment_parameter', __('Payment Parameter'));
         $status = [
             'on'  => ['value' => 1, 'text' => 'Enable', 'color' => 'success'],
             'off' => ['value' => 0, 'text' => 'Disable', 'color' => 'danger'],
         ];
-        
-        $form->switch('enabled', __('Enabled'))->states($status)->required();
+        $form->switch('status', __('Enabled'))->states($status);
 
         return $form;
     }

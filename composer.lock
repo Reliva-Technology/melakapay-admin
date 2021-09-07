@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "388557745493a65e2c5dc89d03a3dbea",
+    "content-hash": "e3dbe326c15e7d0e9f660a34915c64b7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1532,6 +1532,63 @@
             "time": "2019-04-28T10:50:40+00:00"
         },
         {
+            "name": "laravel-admin-ext/chartjs",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/chartjs.git",
+                "reference": "3a12f9907c9d4ba59cdd1c9033e67325a337469f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/chartjs/zipball/3a12f9907c9d4ba59cdd1c9033e67325a337469f",
+                "reference": "3a12f9907c9d4ba59cdd1c9033e67325a337469f",
+                "shasum": ""
+            },
+            "require": {
+                "encore/laravel-admin": "*",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Chartjs\\ChartjsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Chartjs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "song",
+                    "email": "zosong@126.com"
+                }
+            ],
+            "description": "Use Chartjs in laravel-admin",
+            "homepage": "https://github.com/laravel-admin-ext/chartjs",
+            "keywords": [
+                "chartjs",
+                "extension",
+                "laravel-admin"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-admin-extensions/chartjs/issues",
+                "source": "https://github.com/laravel-admin-extensions/chartjs/tree/master"
+            },
+            "time": "2018-09-16T17:28:26+00:00"
+        },
+        {
             "name": "laravel-admin-ext/config",
             "version": "v1.1",
             "source": {
@@ -1588,6 +1645,64 @@
                 "source": "https://github.com/laravel-admin-extensions/config/tree/v1.1"
             },
             "time": "2019-12-11T02:31:22+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/daterangepicker",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/daterangepicker.git",
+                "reference": "f38de46062203973ecfea1ab4092839eef77e269"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/daterangepicker/zipball/f38de46062203973ecfea1ab4092839eef77e269",
+                "reference": "f38de46062203973ecfea1ab4092839eef77e269",
+                "shasum": ""
+            },
+            "require": {
+                "encore/laravel-admin": "~1.6",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\DateRangePicker\\DateRangePickerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\DateRangePicker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "song",
+                    "email": "zosong@126.com"
+                }
+            ],
+            "description": "Integrates daterangepicker into laravel-admin",
+            "homepage": "https://github.com/laravel-admin-ext/daterangepicker",
+            "keywords": [
+                "daterangepicker",
+                "extension",
+                "form",
+                "laravel-admin"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-admin-extensions/daterangepicker/issues",
+                "source": "https://github.com/laravel-admin-extensions/daterangepicker/tree/v1.0.0"
+            },
+            "time": "2018-09-13T17:50:59+00:00"
         },
         {
             "name": "laravel-admin-ext/log-viewer",
@@ -1702,6 +1817,64 @@
                 "source": "https://github.com/laravel-admin-extensions/phpinfo/tree/v1.0"
             },
             "time": "2018-09-09T09:38:15+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/scheduling",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/scheduling.git",
+                "reference": "72bd03a2917a7d479b019ccc64e991c7d5bec7bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/scheduling/zipball/72bd03a2917a7d479b019ccc64e991c7d5bec7bb",
+                "reference": "72bd03a2917a7d479b019ccc64e991c7d5bec7bb",
+                "shasum": ""
+            },
+            "require": {
+                "encore/laravel-admin": "~1.5",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "laravel/laravel": "~5.5",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Admin\\Scheduling\\SchedulingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Admin\\Scheduling\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "z-song",
+                    "email": "zosong@126.com"
+                }
+            ],
+            "description": "Task scheduling extension for laravel-admin",
+            "homepage": "https://github.com/laravel-admin-extensions/scheduling",
+            "keywords": [
+                "laravel-admin",
+                "scheduling",
+                "task"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-admin-extensions/scheduling/issues",
+                "source": "https://github.com/laravel-admin-extensions/scheduling/tree/v1.1"
+            },
+            "time": "2019-12-11T02:46:10+00:00"
         },
         {
             "name": "laravel-admin-ext/summernote",

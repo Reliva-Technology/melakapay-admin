@@ -14,9 +14,12 @@
         "jxlwqq/composer-viewer": "^1.0",
         "jxlwqq/env-manager": "^0.1.0",
         "jxlwqq/material-ui": "^1.0",
+        "laravel-admin-ext/chartjs": "^1.0",
         "laravel-admin-ext/config": "^1.1",
+        "laravel-admin-ext/daterangepicker": "^1.0",
         "laravel-admin-ext/log-viewer": "^1.0",
         "laravel-admin-ext/phpinfo": "^1.0",
+        "laravel-admin-ext/scheduling": "^1.1",
         "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5"

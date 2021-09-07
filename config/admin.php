@@ -410,14 +410,17 @@ return [
             'enable' => false
         ],
         'summernote' => [
-        
-            //Set to false if you want to disable this extension
             'enable' => true,
-            
-            // Editor configuration
             'config' => [
-                
             ]
+        ],
+        'daterangepicker' => [
+            'enable' => true,
+            'config' => [
+            ]
+        ],
+        'chartjs' => [
+            'enable' => true,
         ]
     ],
 ];
