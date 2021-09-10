@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Str;
+Use Encore\Admin\Admin;
 
 class AgencyDetailsController extends AdminController
 {
@@ -76,15 +77,23 @@ class AgencyDetailsController extends AdminController
         $form->select('agency_id', __('Agency'))
             ->options(Agency::all()->pluck('agency_name','id'))
             ->required();
-        $form->text('slug')
-            ->readonly();
+        $form->hidden('slug');
+        $form->hidden('agency');
         $form->summernote('description', __('Description'));
         $form->image('logo', __('Logo'));
         $form->url('url', __('URL'));
 
         $form->saving(function (Form $form) {
-            $form->slug = Str::slug($form->slug, '-');
+            $agency = $form->agency;
+            $form->slug = Str::slug($agency, '-');
         });
+
+        Admin::script("
+        $('.agency_id').on('change', function(){
+            var agency = $('.agency_id option:selected').text();
+            $('.agency').val(agency);
+        });
+        ");
 
         return $form;
     }
