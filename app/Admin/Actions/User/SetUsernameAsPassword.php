@@ -24,7 +24,7 @@ class SetUsernameAsPassword extends RowAction
     {
         # update local password
         $password = $model['username'];
-        $model->password = \Hash::make(); # set default password as IC
+        $model->password = \Hash::make($password); # set default password as IC
         $model->save();
 
         # update ebayar password
