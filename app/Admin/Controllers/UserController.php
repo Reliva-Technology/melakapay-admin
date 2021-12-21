@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Admin\Actions\User\ResetPassword;
+use App\Admin\Actions\User\SetUsernameAsPassword;
 
 class UserController extends AdminController
 {
@@ -49,6 +50,7 @@ class UserController extends AdminController
 
         $grid->actions(function ($actions) {
             $actions->add(new ResetPassword);
+            $actions->add(new SetUsernameAsPassword);
         });
 
         return $grid;
@@ -136,9 +138,9 @@ class UserController extends AdminController
         $form->email('email', __('Email'));
         $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
             ->updateRules(['required', "unique:users,username,{{id}}"]);
-        $form->password('password', __('Password'))->rules('required|regex:/^\d+$/|min:8', [
+        $form->password('password', __('Password'))->rules('required|regex:/^\d+$/|min:12', [
                 'regex' => 'Password must be numbers',
-                'min'   => 'Password can not be less than 8 characters',
+                'min'   => 'Password can not be less than 12 characters',
             ]);
         $form->text('remember_token', __('Remember token'))->attribute('readonly');
         $form->text('api_token', __('Api token'))->attribute('readonly');

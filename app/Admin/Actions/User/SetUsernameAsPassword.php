@@ -9,13 +9,12 @@ use App\Notifications\UserPasswordReset;
 use Illuminate\Support\Facades\Notification;
 use GuzzleHttp\Client;
 
-class ResetPassword extends RowAction
+class SetUsernameAsPassword extends RowAction
 {
-    public $name = 'Reset Password';
+    public $name = 'Set Username As Password';
 
     private function ebayarEncrypt($message){
         $encryptionKey = "8017aa25b6c6ba0c56110e3544718361af905f83f151f4f3af8f029cd36ee84d";
-         
         $encryptionKeyBytes = pack('H*', $encryptionKey);
         $rawHmac = hash_hmac('sha256', $message, $encryptionKeyBytes, true);
         return bin2hex($rawHmac);
@@ -24,8 +23,8 @@ class ResetPassword extends RowAction
     public function handle(Model $model)
     {
         # update local password
-        $password = \Str::random(12);
-        $model->password = \Hash::make($password);
+        $password = $model['username'];
+        $model->password = \Hash::make(); # set default password as IC
         $model->save();
 
         # update ebayar password
@@ -48,7 +47,7 @@ class ResetPassword extends RowAction
             ]
         ]);
 
-        return $this->response()->success('Password reset successfully.');
+        return $this->response()->success('Temporary password set successfully.');
     }
 
 }
