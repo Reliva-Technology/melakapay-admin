@@ -5,9 +5,10 @@ namespace App\Admin\Actions\User;
 use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-use App\Notifications\UserPasswordReset;
+use App\Notifications\UsernamePasswordReset;
 use Illuminate\Support\Facades\Notification;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class SetUsernameAsPassword extends RowAction
 {
@@ -37,15 +38,7 @@ class SetUsernameAsPassword extends RowAction
 
         # Send e-mail notification
         $model['new_password'] = $password;
-        Notification::send($model, new UserPasswordReset($model));
-
-        # send SMS notification
-        $client = new Client();
-        $client->post('POST', env('APP_URL').'/credential/reset-password',[
-            'form_params' => [
-                'email' => $model['email']
-            ]
-        ]);
+        Notification::send($model, new UsernamePasswordReset($model));
 
         return $this->response()->success('Temporary password set successfully.');
     }

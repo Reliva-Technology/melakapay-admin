@@ -26,11 +26,10 @@ class UserPasswordReset extends Notification
     {
         return (new MailMessage)
             ->subject('Details Changes at MelakaPay')
-            ->greeting('Dear '.$this->user->profile->name)
+            ->greeting('Dear '.$this->user->name)
             ->line('This is to inform that we have made some changes in your user profile at MelakaPay, upon your request. The account details are as below:')
-            ->formatLine('Full Name: '.$this->user->profile->name.'<br>User ID: '.$this->user->username)
+            ->line('Full Name: '.$this->user->name.'<br>User ID: '.$this->user->username)
             ->line('The changes made can be found below:')
-            ->formatLine('Account Details')
             ->line('New Password: '.$this->user->new_password)
             ->line('If this is not your account / request, kindly contact our administrator using the contact details below the soonest:')
             ->line('Telephone No: +606-3333333 ext 7656')
