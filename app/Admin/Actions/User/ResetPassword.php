@@ -41,14 +41,6 @@ class ResetPassword extends RowAction
         $model['new_password'] = $password;
         Notification::send($model, new UserPasswordReset($model));
 
-        # send SMS notification
-        $client = new Client();
-        $client->post('POST', env('APP_URL').'/credential/reset-password',[
-            'form_params' => [
-                'email' => $model['email']
-            ]
-        ]);
-
         return $this->response()->success('Password reset successfully.');
     }
 
