@@ -27,6 +27,7 @@ Route::group([
     $router->resource('faqs', FaqController::class);
     $router->resource('agency-details', AgencyDetailsController::class);
     $router->resource('uploads', UploadController::class);
+    $router->resource('carian-persendirian', CarianPersendirianController::class);
 
     $router->get('/api/service','SchedulerController@service');
 
