@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 class SetUsernameAsPassword extends RowAction
 {
-    public $name = 'Set Username As Password';
+    public $name = 'Set IC As Password';
 
     private function ebayarEncrypt($message){
         $encryptionKey = "8017aa25b6c6ba0c56110e3544718361af905f83f151f4f3af8f029cd36ee84d";
