@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Carbon\Carbon as Carbon;
 
 class FeedbackController extends AdminController
 {
@@ -32,9 +33,13 @@ class FeedbackController extends AdminController
         $grid->column('title', __('Title'));
         $grid->column('message', __('Message'));
         $grid->column('user.name', __('User Name'));
-        $grid->column('status', __('Status'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('status', __('Status'))->bool();
+        $grid->created_at()->display(function ($created) {
+            return Carbon::parse($created)->diffForHumans();
+        });
+        $grid->updated_at()->display(function ($updated) {
+            return Carbon::parse($updated)->diffForHumans();
+        });
 
         $grid->filter(function($filter){
 
