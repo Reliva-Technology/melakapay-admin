@@ -1,4 +1,11 @@
-.dropdown-menu {
+/* .dropdown-menu {
     position: relative !important;
     float: none !important;
+} */
+
+.box.box-solid.box-default {
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid #d2d6de !important;
+    border-left: none !important;
 }
