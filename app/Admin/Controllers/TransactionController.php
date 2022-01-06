@@ -12,6 +12,7 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Box;
 use DB;
 use Carbon\Carbon;
+use App\Admin\Actions\Transaction\GetTransactionFromEpic;
 
 class TransactionController extends AdminController
 {
@@ -35,7 +36,9 @@ class TransactionController extends AdminController
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->column('agency.agency_name', __('Agency'));
-        $grid->column('amount', __('Amount'));
+        $grid->amount()->display(function ($amount) {
+            return number_format($amount,2);
+        });
         $grid->column('status', __('Status'))->bool();
         $grid->column('created_at', __('Created at'))->hide();
 
@@ -56,13 +59,17 @@ class TransactionController extends AdminController
             $actions->disableEdit();
         });
 
+        $grid->actions(function ($actions) {
+            $actions->add(new GetTransactionFromEpic);
+        });
+
         $grid->disableCreateButton();
 
         $grid->header(function ($query) {
             $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
                 ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
-            $doughnut = view('admin.charts.user', compact('method'));
-            return new Box('Payment Menthod', $doughnut);
+            $doughnut = view('admin.charts.payment-mode', compact('method'));
+            return new Box('Payment Mode', $doughnut);
         });
 
         return $grid;
@@ -81,7 +88,9 @@ class TransactionController extends AdminController
         $show->field('id', __('ID'));
         $show->field('agency_id', __('Agency ID'));
         $show->field('account_id', __('Account ID'));
-        $show->field('amount', __('Amount'));
+        $show->amount()->as(function ($amount) {
+            return number_format($amount,2);
+        });
         $show->field('payment_type', __('Payment mode'));
         $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success']);
         $show->field('epx_trns_no', __('EPS Transaction ID'));
