@@ -44,4 +44,9 @@ class ResetPassword extends RowAction
         return $this->response()->success('Password reset successfully.');
     }
 
+    public function dialog()
+    {
+        $this->confirm('Are you sure?');
+    }
+
 }
