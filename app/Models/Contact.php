@@ -15,6 +15,7 @@ class Contact extends Model
     public $fillable = [
         'agency_id',
         'address',
+        'email',
         'telephone'
     ];
 
@@ -22,12 +23,14 @@ class Contact extends Model
         'id' => 'integer',
         'agency_id' => 'integer',
         'address' => 'string',
+        'email' => 'string',
         'telephone' => 'string'
     ];
 
     public static $rules = [
         'agency_id' => 'required|integer',
         'address' => 'required|string',
+        'address' => 'required|string|email',
         'telephone' => 'required|string|max:255',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
@@ -45,5 +48,10 @@ class Contact extends Model
     public function contactDetails()
     {
         return $this->hasMany(ContactDetail::class);
+    }
+
+    public function getContactDetailsAttribute()
+    {
+        return $this->contactDetails()->get(['contact_details.name', 'contact_details.email', 'contact_details.telephone']);
     }
 }
