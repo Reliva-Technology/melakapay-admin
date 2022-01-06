@@ -30,6 +30,7 @@ class ContactController extends AdminController
         $grid->column('id', __('ID'));
         $grid->column('agency.agency_name', __('Agency'));
         $grid->column('address', __('Address'));
+        $grid->column('email', __('E-mail'));
         $grid->column('telephone', __('Telephone'));
         $grid->column('ordering', __('Ordering'));
 
@@ -62,6 +63,7 @@ class ContactController extends AdminController
 
         $show->field('agency.agency_name', __('Agency'));
         $show->field('address', __('Address'));
+        $show->field('email', __('E-mail'));
         $show->field('telephone', __('Telephone'));
         $show->field('ordering', __('Ordering'));
 
@@ -92,6 +94,7 @@ class ContactController extends AdminController
 
         $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
         $form->textarea('address', __('Address'));
+        $form->email('email', __('E-mail'));
         $form->text('telephone', __('Telephone'));
         $form->number('ordering', __('Ordering'));
 
