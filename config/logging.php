@@ -49,8 +49,8 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            //'path' => storage_path('logs/laravel.log'),
-            'path' => '/var/www/html/e-bayar-api/storage/logs/laravel.log',
+            'path' => storage_path('logs/laravel.log'),
+            //'path' => '/var/www/html/e-bayar-api/storage/logs/laravel.log',
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 30,
         ],

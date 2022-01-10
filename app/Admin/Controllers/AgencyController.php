@@ -30,6 +30,7 @@ class AgencyController extends AdminController
         $grid->column('id', __('Agency ID'))->sortable();
         $grid->column('agency', __('Code'))->sortable();
         $grid->column('agency_name', __('Name'))->sortable();
+        $grid->column('ordering', __('Ordering'))->sortable();
         $grid->column('enable', __('Enabled'))->using(['0' => 'No', '1' => 'Yes', '2' => 'Temporary']);
         $grid->updated_at()->display(function ($updated_at) {
             return Carbon::parse($updated_at)->diffForHumans();
@@ -63,7 +64,8 @@ class AgencyController extends AdminController
         $show = new Show(Agency::findOrFail($id));
 
         $show->field('id', __('ID'));
-        $show->field('agency', __('Code'));
+        $show->field('agency', __('Ordering'));
+        $show->field('ordering', __('Code'));
         $show->field('agency_name', __('Name'));
         $show->field('enable', __('Enabled'))->using(['0' => 'No', '1' => 'Yes', '2' => 'Temporary']);
         $show->field('created_at', __('Created at'));
@@ -112,6 +114,7 @@ class AgencyController extends AdminController
             '1' => 'Enabled',
             '2' => 'Temporary Disabled'
         ];
+        $form->number('ordering', __('Ordering'));
         
         $form->radio('enable', __('Enabled'))->options($status)->required();
 

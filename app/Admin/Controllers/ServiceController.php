@@ -32,6 +32,7 @@ class ServiceController extends AdminController
         $grid->column('sub_category', __('Search Type'))->sortable();
         $grid->column('api_url', __('API URL'));
         $grid->column('status', __('Enabled'))->bool();
+        $grid->column('ordering', __('Order'));
         $grid->column('created_at')->hide();
         $grid->column('updated_at', __('Updated at'))->hide();
 
@@ -70,6 +71,7 @@ class ServiceController extends AdminController
         $show->field('parameter', __('Parameter'));
         $show->field('payment_url', __('Payment URL'));
         $show->field('payment_parameter', __('Payment Parameter'));
+        $show->field('ordering', __('Ordering'));
         $show->field('status', __('Enabled'))->using(['0' => 'No', '1' => 'Yes']);
 
         $show->agency('Agency Details', function ($agency) {
@@ -106,6 +108,7 @@ class ServiceController extends AdminController
         $form->text('category', __('Category'))->required();
         $form->text('sub_category', __('Sub Category'))->required();
         $form->text('api_url', __('API URL'))->required();
+        $form->number('ordering', __('Ordering'));
         $form->text('parameter', __('Parameter'));
         $form->text('payment_url', __('Payment URL'));
         $form->text('payment_parameter', __('Payment Parameter'));

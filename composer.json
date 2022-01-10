@@ -14,6 +14,7 @@
         "jxlwqq/composer-viewer": "^1.0",
         "jxlwqq/env-manager": "^0.1.0",
         "jxlwqq/material-ui": "^1.0",
+        "laravel-admin-ext/api-tester": "^1.0",
         "laravel-admin-ext/chartjs": "^1.0",
         "laravel-admin-ext/config": "^1.1",
         "laravel-admin-ext/daterangepicker": "^1.0",
