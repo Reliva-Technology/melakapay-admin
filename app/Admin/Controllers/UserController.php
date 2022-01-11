@@ -10,6 +10,9 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Admin\Actions\User\ResetPassword;
 use App\Admin\Actions\User\SetUsernameAsPassword;
+use Carbon\Carbon as Carbon;
+use Encore\Admin\Widgets\Box;
+use DB;
 
 class UserController extends AdminController
 {
@@ -33,8 +36,9 @@ class UserController extends AdminController
         $grid->column('name', __('Name'));
         $grid->column('email', __('E-mail'));
         $grid->column('username', __('IC'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->updated_at()->display(function ($updated) {
+            return Carbon::parse($updated)->diffForHumans();
+        });
 
         $grid->filter(function($filter){
 
@@ -46,6 +50,18 @@ class UserController extends AdminController
             $filter->like('email', __('E-mail Address'));
             $filter->like('username', __('IC/Passport No.'));
         
+        });
+
+        $today = Carbon::today();
+
+        $grid->header(function ($query) {
+            $created = $query->select(DB::raw('count(username) as count, DATE(created_at) as created_at'))
+                ->groupBy('created_at')
+                ->get()
+                ->pluck('count', 'created_at')
+                ->toArray();
+            $doughnut = view('admin.charts.user', compact('created'));
+            return new Box('Registration', $doughnut);
         });
 
         $grid->actions(function ($actions) {

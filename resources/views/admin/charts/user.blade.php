@@ -3,12 +3,13 @@
 $(function () {
 
     var config = {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             datasets: [{
                 data: [
-                    {{ $method['fpx'] }},
-                    {{ $method['fpx1'] }}
+                    @foreach($created as $data)
+                    {{ $data }},
+                    @endforeach
                 ],
                 backgroundColor: [
                     'rgb(54, 162, 235)',
@@ -16,8 +17,9 @@ $(function () {
                 ]
             }],
             labels: [
-                'Individual',
-                'Corporate'
+                @foreach($created as $data)
+                {{ $data }},
+                @endforeach
             ]
         },
         options: {
