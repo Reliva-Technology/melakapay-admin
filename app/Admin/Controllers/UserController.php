@@ -151,13 +151,9 @@ class UserController extends AdminController
 
         $form->hidden('id', __('Id'));
         $form->text('name', __('Name'));
-        $form->email('email', __('Email'));
+        $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
         $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
             ->updateRules(['required', "unique:users,username,{{id}}"]);
-        $form->password('password', __('Password'))->rules('required|regex:/^\d+$/|min:12', [
-                'regex' => 'Password must be numbers',
-                'min'   => 'Password can not be less than 12 characters',
-            ]);
         $form->text('remember_token', __('Remember token'))->attribute('readonly');
         $form->text('api_token', __('Api token'))->attribute('readonly');
         $form->text('device_token', __('Device token'))->attribute('readonly');
