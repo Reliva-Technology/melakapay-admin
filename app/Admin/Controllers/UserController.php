@@ -55,7 +55,7 @@ class UserController extends AdminController
         $today = Carbon::today();
 
         $grid->header(function ($query) {
-            $created = $query->select(DB::raw('count(username) as count, DATE(created_at) as created_at'))
+            $created = $query->select(DB::raw('count(username) as count, MONTH(created_at) as created_at'))
                 ->groupBy('created_at')
                 ->get()
                 ->pluck('count', 'created_at')
