@@ -7,8 +7,8 @@ $(function () {
         data: {
             datasets: [{
                 data: [
-                    @foreach($created as $data)
-                    {{ $data }},
+                    @foreach($created as $key => $value)
+                    {{ $key }},
                     @endforeach
                 ],
                 backgroundColor: [
@@ -27,7 +27,7 @@ $(function () {
         }
     };
 
-    var ctx = document.getElementById('doughnut').getContext('2d');
+    var ctx = document.getElementById('doughnut').getContext('3d');
     new Chart(ctx, config);
 });
 </script>

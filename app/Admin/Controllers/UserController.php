@@ -61,7 +61,7 @@ class UserController extends AdminController
                 ->pluck('count', 'created_at')
                 ->toArray();
             $doughnut = view('admin.charts.user', compact('created'));
-            return new Box('Registration', $doughnut);
+            #return new Box('Registration', $doughnut);
         });
 
         $grid->actions(function ($actions) {

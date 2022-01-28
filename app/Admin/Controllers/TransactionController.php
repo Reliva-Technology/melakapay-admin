@@ -54,9 +54,15 @@ class TransactionController extends AdminController
         
         });
 
+        $grid->header(function ($query) {
+            $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
+                ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
+            $doughnut = view('admin.charts.payment-mode', compact('method'));
+            return new Box('Payment Mode', $doughnut);
+        });
+
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
-            $actions->disableEdit();
+            $actions->disableDelete()->disableEdit();
         });
 
         $grid->actions(function ($actions) {
@@ -64,13 +70,6 @@ class TransactionController extends AdminController
         });
 
         $grid->disableCreateButton();
-
-        $grid->header(function ($query) {
-            $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
-                ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
-            $doughnut = view('admin.charts.payment-mode', compact('method'));
-            return new Box('Payment Mode', $doughnut);
-        });
 
         return $grid;
     }
