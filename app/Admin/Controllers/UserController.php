@@ -85,7 +85,7 @@ class UserController extends AdminController
 
         $show->panel()->style('primary')->title('User details');
 
-        $show->field('id', __('Id'));
+        $show->field('id', __('User ID'));
         $show->field('name', __('Name'));
         $show->field('email', __('Email'));
         $show->field('username', __('Username'));
@@ -100,7 +100,7 @@ class UserController extends AdminController
 
         $show->profile('Profile information', function ($profile) {
 
-            $profile->setResource('/profile');
+            $profile->setResource('/profiles');
         
             $profile->id_type('ID Type');
             $profile->id_no('IC/Passport No.');
@@ -109,6 +109,15 @@ class UserController extends AdminController
             $profile->postcode();
             $profile->city();
             $profile->state();
+            $profile->phone_no('Phone Number');
+            $profile->divider();
+            $profile->company_name('Company Name');
+            $profile->roc_no('Company ROC Number');
+            $profile->company_address1('Company Address Line 1');
+            $profile->company_address2('Company Address Line 2');
+            $profile->company_city('Company City');
+            $profile->company_postcode('Company Postcode');
+            $profile->company_state('Company State');
         });
 
         $show->transaction('Transaction', function ($transaction) {
@@ -154,7 +163,7 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
-        $form->hidden('id', __('Id'));
+        $form->hidden('id', __('User ID'));
         $form->text('name', __('Name'));
         $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
         $form->text('username', __('IC'))->creationRules(['required', "unique:users"])

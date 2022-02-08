@@ -39,7 +39,7 @@ class TransactionController extends AdminController
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
         });
-        $grid->column('status', __('Status'))->bool();
+        $grid->column('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
         $grid->column('created_at', __('Created at'))->hide();
 
         $grid->filter(function($filter){
@@ -50,6 +50,15 @@ class TransactionController extends AdminController
             // Add a column filter
             $filter->like('epx_trns_no', 'EPS Transaction ID');
             $filter->like('receipt_no', 'Receipt No');
+            $filter->equal('status', 'Status')->radio(
+                [
+                    '' => 'All',
+                    1 => 'Success',
+                    0 => 'Failed',
+                    2 => 'Cancelled',
+                    3 => 'Pending'
+                ]
+            );
             $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
         
         });
@@ -58,7 +67,7 @@ class TransactionController extends AdminController
             $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
                 ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
             $doughnut = view('admin.charts.payment-mode', compact('method'));
-            return new Box('Payment Mode', $doughnut);
+            //return new Box('Payment Mode', $doughnut);
         });
 
         $grid->actions(function ($actions) {
@@ -91,7 +100,7 @@ class TransactionController extends AdminController
             return number_format($amount,2);
         });
         $show->field('payment_type', __('Payment mode'));
-        $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success']);
+        $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
         $show->field('modified', __('Created at'));
