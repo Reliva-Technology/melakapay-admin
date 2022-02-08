@@ -95,6 +95,9 @@ class TransactionController extends AdminController
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
         $show->field('modified', __('Created at'));
+        $show->id(__('Action'))->unescape()->as(function ($id) {
+            return '<a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$id.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+        });
 
         $show->user(__('User'), function ($user){
             $user->setResource('/users');
