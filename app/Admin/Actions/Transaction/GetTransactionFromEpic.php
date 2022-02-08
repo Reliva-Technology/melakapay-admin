@@ -16,6 +16,8 @@ class GetTransactionFromEpic extends RowAction
     {
         $epic = DB::connection('epic')->table('eps_transactions')->where('merchant_trans_id', $model->id)->first();
 
+        return $this->response()->warning($epic);
+
         if($epic){
 
             # update transaction
