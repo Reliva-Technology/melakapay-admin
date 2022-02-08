@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    public $table = 'profiles';
+    public $table = 'user_details';
 
     public $fillable = [
         'user_id',
