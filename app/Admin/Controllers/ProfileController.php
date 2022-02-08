@@ -49,12 +49,12 @@ class ProfileController extends AdminController
     {
         $show = new Show(Profile::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('user_id', __('User id'));
-        $show->field('id_type', __('Id type'));
-        $show->field('id_no', __('Id no'));
-        $show->field('address', __('Address'));
-        $show->field('address2', __('Address2'));
+        $show->field('id', __('ID'));
+        $show->field('user_id', __('User ID'));
+        $show->field('id_type', __('ID type'));
+        $show->field('id_no', __('ID No.'));
+        $show->field('address', __('Address Line 1'));
+        $show->field('address2', __('Address Line 2'));
         $show->field('postcode', __('Postcode'));
         $show->field('city', __('City'));
         $show->field('state', __('State'));
@@ -94,7 +94,7 @@ class ProfileController extends AdminController
             $form->textarea('address2', __('Address2'));
             $form->number('postcode', __('Postcode'));
             $form->text('city', __('City'));
-            $form->select('state', __('State'))->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+            $form->text('state', __('State'));
         });
 
         $form->column(1/2, function ($form) {
