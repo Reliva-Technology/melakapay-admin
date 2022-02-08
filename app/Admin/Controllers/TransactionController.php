@@ -32,7 +32,6 @@ class TransactionController extends AdminController
     {
         $grid = new Grid(new Transaction());
 
-        $grid->model()->whereNotNull('receipt_no')->orderBy('id', 'desc');
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->column('agency.agency_name', __('Agency'));
