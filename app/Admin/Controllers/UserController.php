@@ -13,6 +13,7 @@ use App\Admin\Actions\User\SetUsernameAsPassword;
 use Carbon\Carbon as Carbon;
 use Encore\Admin\Widgets\Box;
 use DB;
+use App\Admin\Actions\Transaction\GetTransactionFromEpic;
 
 class UserController extends AdminController
 {
@@ -123,6 +124,10 @@ class UserController extends AdminController
             $transaction->epx_trns_no(__('EPS Transaction ID'));
             $transaction->receipt_no(__('Receipt No'));
             $transaction->modified(__('Created at'));
+
+            $transaction->actions(function ($actions) {
+                $actions->add(new GetTransactionFromEpic);
+            });
         });
 
         $show->feedback('Feedback', function ($feedback) {
