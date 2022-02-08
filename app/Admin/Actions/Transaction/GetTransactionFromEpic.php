@@ -16,8 +16,6 @@ class GetTransactionFromEpic extends RowAction
     {
         $epic = DB::connection('epic')->table('eps_transactions')->where('merchant_trans_id', $model->id)->first();
 
-        return $this->response()->warning($epic);
-
         if($epic){
 
             # update transaction
@@ -33,7 +31,7 @@ class GetTransactionFromEpic extends RowAction
             # generate receipt
             if($epic->receipt_no != NULL){
                 
-                $url = env('EPAYMENT_URL').'/eps/response/'.base64_encode($model->id);
+                $url = env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id);
                 $response = Http::get($url);
                 
                 if($response->body() == 'Successful'){
