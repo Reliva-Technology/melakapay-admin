@@ -192,7 +192,7 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
-        $form->hidden('id', __('User ID'));
+        $form->text('id', __('User ID'))->attribute('readonly');
         $form->text('name', __('Name'));
         $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
         $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
