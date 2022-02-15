@@ -254,9 +254,9 @@ class UserController extends AdminController
             'Labuan' => 'Labuan'
         ]);
 
-        $form->saving(function (Form $form) {
-            $form->profile->user_id = $form->id;
-        });
+        $form->text('profile.user_id')->value($form->id);
+        $form->text('profile.full_name')->value($form->name);
+        $form->text('profile.id_type')->value('MyKad');
 
         return $form;
     }
