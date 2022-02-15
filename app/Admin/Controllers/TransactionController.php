@@ -79,7 +79,8 @@ class TransactionController extends AdminController
         });
 
         $grid->actions(function ($actions) {
-            $actions->disableDelete()->disableEdit();
+            //$actions->disableEdit();
+            $actions->disableDelete();
             $actions->add(new GetTransactionFromEpic);
         });
 
@@ -117,6 +118,10 @@ class TransactionController extends AdminController
             $user->setResource('/users');
             $user->name();
             $user->email();
+            $user->id(__('Action'))->unescape()->as(function ($user_id) {
+                return '<a href="'.url('/carian-persendirian/add-carian-persendirian').'/'.$user_id.'" class="btn btn-sm btn-success" title="Carian Persendirian">Carian Persendirian</a>';
+            });
+
             $user->panel()->tools(function ($tools) {
                 $tools->disableEdit();
                 $tools->disableList();
@@ -142,14 +147,16 @@ class TransactionController extends AdminController
     {
         $form = new Form(new Transaction());
 
-        $form->number('user_id', __('User id'));
-        $form->number('service_id', __('Service id'));
-        $form->text('amount', __('Amount'))->default('double');
-        $form->text('payment_mode', __('Payment mode'))->default('string');
-        $form->text('payment_method', __('Payment method'))->default('string');
-        $form->switch('status', __('Status'))->default(2);
-        $form->text('receipt_no', __('Receipt no'));
-        $form->number('payment_id', __('Payment id'));
+        $form->text('epx_trns_no', __('EPS Transaction ID'));
+        $form->text('receipt_no', __('Receipt No'));
+        
+        $form->number('user_id', __('User ID'));
+                
+        $form->text('status', __('Status'));
+        $form->text('account_id', __('Account No'));
+        $form->datetime('date_payment', __('Payment Date'));
+        $form->text('payment_type', __('Payment Type'));
+        $form->text('amount', __('Amount'));
 
         return $form;
     }

@@ -56,28 +56,13 @@ class UserController extends AdminController
         
         });
 
-        $today = Carbon::today();
-
-        $grid->header(function ($query) {
-            $created = $query->select(DB::raw('count(username) as count, MONTH(created_at) as created_at'))
-                ->groupBy('created_at')
-                ->get()
-                ->pluck('count', 'created_at')
-                ->toArray();
-            $doughnut = view('admin.charts.user', compact('created'));
-            #return new Box('Registration', $doughnut);
-        });
-
         $grid->actions(function ($actions) {
             $actions->add(new ResetPassword);
             $actions->add(new SetUsernameAsPassword);
+            $actions->disableDelete();
         });
 
         $grid->disableCreateButton();
-
-        $grid->actions(function ($actions) {
-            $actions->disableDelete();
-        });
 
         return $grid;
     }

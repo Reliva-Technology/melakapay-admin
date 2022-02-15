@@ -12,6 +12,7 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('home');
+    $router->get('/about', 'HomeController@about')->name('about');
     $router->resource('agencies', AgencyController::class);
     $router->resource('services', ServiceController::class);
     $router->resource('agency-api', AgencyServiceController::class);
@@ -29,6 +30,7 @@ Route::group([
     $router->resource('uploads', UploadController::class);
     $router->resource('carian-persendirian', CarianPersendirianController::class);
     $router->get('/carian-persendirian/print-carian-persendirian/{id}','CarianPersendirianController@print');
+    $router->get('/carian-persendirian/add-carian-persendirian/{id}','CarianPersendirianController@carian');
 
     $router->get('/api/service','SchedulerController@service');
 
