@@ -253,6 +253,11 @@ class UserController extends AdminController
             'Sarawak' => 'Sarawak',
             'Labuan' => 'Labuan'
         ]);
+
+        $form->saving(function (Form $form) {
+            $form->profile->user_id = $form->id;
+        });
+
         return $form;
     }
 }
