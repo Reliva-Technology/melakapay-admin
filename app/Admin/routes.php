@@ -28,6 +28,7 @@ Route::group([
     $router->resource('agency-details', AgencyDetailsController::class);
     $router->resource('uploads', UploadController::class);
     $router->resource('carian-persendirian', CarianPersendirianController::class);
+    $router->get('/carian-persendirian/print-carian-persendirian/{id}','CarianPersendirianController@print');
 
     $router->get('/api/service','SchedulerController@service');
 

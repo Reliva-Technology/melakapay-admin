@@ -40,7 +40,7 @@ class TransactionController extends AdminController
             return number_format($amount,2);
         });
         $grid->column('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
-        $grid->column('created_at', __('Created at'))->hide();
+        $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
 
         $grid->filter(function($filter){
 
@@ -48,6 +48,7 @@ class TransactionController extends AdminController
             $filter->disableIdFilter();
         
             // Add a column filter
+            $filter->between('modified', 'Date Range')->date();
             $filter->like('epx_trns_no', 'EPS Transaction ID');
             $filter->like('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
@@ -57,6 +58,13 @@ class TransactionController extends AdminController
                     0 => 'Failed',
                     2 => 'Cancelled',
                     3 => 'Pending'
+                ]
+            );
+            $filter->like('payment_type', 'Payment Type')->radio(
+                [
+                    '' => 'All',
+                    'fpx' => 'FPX Individual',
+                    'fpx1' => 'FPX Corporate'
                 ]
             );
             $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
@@ -72,9 +80,6 @@ class TransactionController extends AdminController
 
         $grid->actions(function ($actions) {
             $actions->disableDelete()->disableEdit();
-        });
-
-        $grid->actions(function ($actions) {
             $actions->add(new GetTransactionFromEpic);
         });
 
@@ -119,10 +124,11 @@ class TransactionController extends AdminController
             });
         });
 
-        $show->panel()->tools(function ($tools) {
-            $tools->disableEdit();
-            $tools->disableDelete();
-        });
+        $show->panel()
+            ->tools(function ($tools) {
+                $tools->disableEdit();
+                $tools->disableDelete();
+            });
 
         return $show;
     }

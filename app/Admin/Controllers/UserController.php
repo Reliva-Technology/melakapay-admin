@@ -37,6 +37,7 @@ class UserController extends AdminController
         $grid->column('name', __('Name'));
         $grid->column('email', __('E-mail'));
         $grid->column('username', __('IC'));
+        $grid->column('profile.phone_no', __('Phone No.'));
         $grid->updated_at()->display(function ($updated) {
             return Carbon::parse($updated)->diffForHumans();
         });
@@ -50,6 +51,8 @@ class UserController extends AdminController
             $filter->like('name', __('Name'));
             $filter->like('email', __('E-mail Address'));
             $filter->like('username', __('IC/Passport No.'));
+            $filter->like('profile.phone_no', __('Phone No.'));
+            $filter->between('created_at', 'Registration Date')->date();
         
         });
 
@@ -68,6 +71,12 @@ class UserController extends AdminController
         $grid->actions(function ($actions) {
             $actions->add(new ResetPassword);
             $actions->add(new SetUsernameAsPassword);
+        });
+
+        $grid->disableCreateButton();
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
         });
 
         return $grid;
@@ -98,7 +107,12 @@ class UserController extends AdminController
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
-        $show->profile('Profile information', function ($profile) {
+        $show->panel()
+            ->tools(function ($tools) {
+                $tools->disableDelete();
+            });
+
+        $show->profile('Profile Information', function ($profile) {
 
             $profile->setResource('/profiles');
         
@@ -110,7 +124,7 @@ class UserController extends AdminController
             $profile->city();
             $profile->state();
             $profile->phone_no('Phone Number');
-            $profile->divider();
+            $profile->divider('Company Information');
             $profile->company_name('Company Name');
             $profile->roc_no('Company ROC Number');
             $profile->company_address1('Company Address Line 1');
@@ -118,6 +132,12 @@ class UserController extends AdminController
             $profile->company_city('Company City');
             $profile->company_postcode('Company Postcode');
             $profile->company_state('Company State');
+
+            $profile->panel()
+                ->tools(function ($tools) {
+                    $tools->disableEdit();
+                    $tools->disableDelete();
+                });
         });
 
         $show->transaction('Transaction', function ($transaction) {
@@ -137,6 +157,30 @@ class UserController extends AdminController
             $transaction->actions(function ($actions) {
                 $actions->add(new GetTransactionFromEpic);
             });
+
+            $transaction->filter(function($filter){
+
+                // Remove the default id filter
+                $filter->disableIdFilter();
+            
+                // Add a column filter
+                $filter->between('modified', 'Date Range')->date();
+                $filter->like('epx_trns_no', 'EPS Transaction ID');
+                $filter->like('receipt_no', 'Receipt No');
+                $filter->equal('status', 'Status')->radio(
+                    [
+                        '' => 'All',
+                        1 => 'Success',
+                        0 => 'Failed',
+                        2 => 'Cancelled',
+                        3 => 'Pending'
+                    ]
+                );
+                $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
+            
+            });
+
+            $transaction->disableCreateButton();
         });
 
         $show->feedback('Feedback', function ($feedback) {
@@ -171,7 +215,59 @@ class UserController extends AdminController
         $form->text('remember_token', __('Remember token'))->attribute('readonly');
         $form->text('api_token', __('Api token'))->attribute('readonly');
         $form->text('device_token', __('Device token'))->attribute('readonly');
+        $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
 
+        $form->divider('Personal Information');
+        $form->text('profile.address','Address Line 1');
+        $form->text('profile.address2','Address Line 2');
+        $form->text('profile.city','City');
+        $form->number('profile.postcode','Postcode');
+        $form->select('profile.state','State')->options([
+            'Pahang' => 'Pahang',
+            'Melaka' => 'Melaka',
+            'Johor' => 'Johor',
+            'Negeri Sembilan' => 'Negeri Sembilan',
+            'Selangor' => 'Selangor',
+            'Kuala Lumpur' => 'Kuala Lumpur',
+            'Putrajaya' => 'Putrajaya',
+            'Perak' => 'Perak',
+            'Kedah' => 'Kedah',
+            'Pulau Pinang' => 'Pulau Pinang',
+            'Perlis' => 'Perlis',
+            'Kelantan' => 'Kelantan',
+            'Terengganu' => 'Terengganu',
+            'Kelantan' => 'Kelantan',
+            'Sabah' => 'Sabah',
+            'Sarawak' => 'Sarawak',
+            'Labuan' => 'Labuan'
+        ]);
+        
+        $form->divider('Company Information');
+        $form->text('profile.company_name','Company Name');
+        $form->text('profile.roc_no','Company ROC Number');
+        $form->text('profile.company_address1','Company Address Line 1');
+        $form->text('profile.company_address2','Company Address Line 2');
+        $form->text('profile.company_city','Company City');
+        $form->number('profile.company_postcode','Company Postcode');
+        $form->select('profile.company_state','Company State')->options([
+            'Pahang' => 'Pahang',
+            'Melaka' => 'Melaka',
+            'Johor' => 'Johor',
+            'Negeri Sembilan' => 'Negeri Sembilan',
+            'Selangor' => 'Selangor',
+            'Kuala Lumpur' => 'Kuala Lumpur',
+            'Putrajaya' => 'Putrajaya',
+            'Perak' => 'Perak',
+            'Kedah' => 'Kedah',
+            'Pulau Pinang' => 'Pulau Pinang',
+            'Perlis' => 'Perlis',
+            'Kelantan' => 'Kelantan',
+            'Terengganu' => 'Terengganu',
+            'Kelantan' => 'Kelantan',
+            'Sabah' => 'Sabah',
+            'Sarawak' => 'Sarawak',
+            'Labuan' => 'Labuan'
+        ]);
         return $form;
     }
 }

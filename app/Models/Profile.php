@@ -9,6 +9,9 @@ class Profile extends Model
 {
     public $table = 'user_details';
 
+    const CREATED_AT = 'modified';
+    const UPDATED_AT = 'modified';
+
     public $fillable = [
         'user_id',
         'id_type',
