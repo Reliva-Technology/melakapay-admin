@@ -27,6 +27,7 @@ class CarianPersendirianController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new CarianPersendirian());
+        $grid->model()->orderBy('id', 'desc');
 
         $grid->column('id', __('ID'));
         $grid->column('bil_paparan', __('Bil. Paparan'));

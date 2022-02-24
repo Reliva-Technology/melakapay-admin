@@ -31,8 +31,8 @@ class TransactionController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Transaction());
-
         $grid->model()->orderBy('id', 'desc');
+        
         $grid->column('agency.agency_name', __('Agency'));
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));

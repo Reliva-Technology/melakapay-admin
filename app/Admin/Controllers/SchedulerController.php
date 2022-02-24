@@ -29,6 +29,7 @@ class SchedulerController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Scheduler());
+        $grid->model()->orderBy('id', 'desc');
 
         $grid->column('id', __('ID'));
         $grid->column('agency.agency_name', __('Agency'));

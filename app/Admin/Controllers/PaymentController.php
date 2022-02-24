@@ -25,8 +25,8 @@ class PaymentController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Payment());
-
         $grid->model()->orderBy('id', 'desc');
+        
         $grid->column('id', __('Payment ID'));
         $grid->column('payment_datetime', __('Payment Date/time'));
         $grid->column('buyer_name', __('Name'));

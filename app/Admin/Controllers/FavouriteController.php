@@ -28,6 +28,7 @@ class FavouriteController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Favourite());
+        $grid->model()->orderBy('id', 'desc');
 
         $grid->column('agency.agency_name', __('Agency'))->sortable();
         $grid->column('account_no', __('Account no'));
