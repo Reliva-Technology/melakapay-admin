@@ -33,14 +33,15 @@ class TransactionController extends AdminController
         $grid = new Grid(new Transaction());
 
         $grid->model()->orderBy('id', 'desc');
+        $grid->column('agency.agency_name', __('Agency'));
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
-        $grid->column('agency.agency_name', __('Agency'));
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
         });
         $grid->column('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
         $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
+        $grid->column('modified', __('Date'));
 
         $grid->filter(function($filter){
 

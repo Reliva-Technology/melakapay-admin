@@ -1,33 +1,35 @@
-<canvas id="doughnut" width="200" height="200"></canvas>
+<canvas id="visitor" height="200"></canvas>
 <script>
 $(function () {
 
     var config = {
-        type: 'bar',
+        type: 'line',
         data: {
             datasets: [{
                 data: [
-                    @foreach($created as $key => $value)
-                    {{ $key }},
+                    @foreach($visitor as $key => $value)
+                    {{ $value }},
                     @endforeach
                 ],
                 backgroundColor: [
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 99, 132)'
+                    'rgba(0, 0, 0, 0.1)'
                 ]
             }],
             labels: [
-                @foreach($created as $data)
-                {{ $data }},
+                @foreach($visitor as $key => $value)
+                {{ $key }},
                 @endforeach
             ]
         },
         options: {
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            }
         }
     };
 
-    var ctx = document.getElementById('doughnut').getContext('3d');
+    var ctx = document.getElementById('visitor').getContext('2d');
     new Chart(ctx, config);
 });
 </script>

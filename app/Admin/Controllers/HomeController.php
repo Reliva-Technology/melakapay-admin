@@ -23,6 +23,10 @@ class HomeController extends Controller
                 $row->column(3, function (Column $column) {
                     $column->append(HomeController::paymentMode());
                 });
+                
+                $row->column(9, function (Column $column) {
+                    $column->append(HomeController::visitor());
+                });
             });
     }
 
@@ -35,6 +39,19 @@ class HomeController extends Controller
             ->toArray();
         $doughnut = view('admin.charts.payment-mode', compact('method'));
         return new Box('Payment Mode', $doughnut);
+    }
+
+    public function visitor()
+    {
+        $visitor = DB::table('visitors')
+            ->select(DB::raw('count(id) as count, date'))
+            ->groupBy('date')
+            ->limit(10)
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
+        $bar = view('admin.charts.user', compact('visitor'));
+        return new Box('Visitor (last 10 days)', $bar);
     }
 
     public function about(Content $content)

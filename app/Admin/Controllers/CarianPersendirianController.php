@@ -17,7 +17,7 @@ class CarianPersendirianController extends AdminController
      *
      * @var string
      */
-    protected $title = 'CarianPersendirian';
+    protected $title = 'Carian Persendirian';
 
     /**
      * Make a grid builder.
@@ -34,6 +34,7 @@ class CarianPersendirianController extends AdminController
         $grid->column('id_portal_transaksi', __('ID Portal'));
         $grid->column('tarikh', __('Tarikh'));
         $grid->column('user_id', __('User ID'));
+        $grid->column('user.name', __('User'));
 
         $grid->filter(function($filter){
 
@@ -43,6 +44,7 @@ class CarianPersendirianController extends AdminController
             // Add a column filter
             $filter->like('id_hakmilik', __('ID Hakmilik'));
             $filter->like('id_portal_transaksi', __('ID Portal'));
+            $filter->like('user_id', __('User ID'));
         
         });
 

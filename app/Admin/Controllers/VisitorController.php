@@ -2,20 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Faq;
+use App\Models\Visitor;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class FaqController extends AdminController
+class VisitorController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'FAQ';
+    protected $title = 'Visitor';
 
     /**
      * Make a grid builder.
@@ -24,12 +24,12 @@ class FaqController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Faq());
+        $grid = new Grid(new Visitor());
+        $grid->model()->orderBy('id', 'desc');
 
-        $grid->column('id', __('ID'));
-        $grid->column('question', __('Question'));
-        $grid->column('answer', __('Answer'));
-        $grid->boolean('status', __('Status'));
+        $grid->column('id', __('Id'));
+        $grid->column('ip', __('Ip'));
+        $grid->column('date', __('Date'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
@@ -44,12 +44,11 @@ class FaqController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Faq::findOrFail($id));
+        $show = new Show(Visitor::findOrFail($id));
 
-        $show->field('id', __('ID'));
-        $show->field('question', __('Question'));
-        $show->field('answer', __('Answer'));
-        $show->field('status', __('Status'));
+        $show->field('id', __('Id'));
+        $show->field('ip', __('Ip'));
+        $show->field('date', __('Date'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -63,15 +62,10 @@ class FaqController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Faq());
+        $form = new Form(new Visitor());
 
-        $form->text('question', __('Question'));
-        $form->summernote('answer', __('Answer'));
-        $status = [
-            '0' => 'Disabled',
-            '1' => 'Enabled'
-        ];
-        $form->radio('status', __('Status'))->options($status)->required();
+        $form->ip('ip', __('Ip'));
+        $form->date('date', __('Date'))->default(date('Y-m-d'));
 
         return $form;
     }

@@ -32,6 +32,7 @@ class UserController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new User());
+        $grid->model()->orderBy('id', 'desc');
 
         $grid->column('id', __('ID'));
         $grid->column('name', __('Name'));
@@ -192,6 +193,8 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
+        $form->column(1/2, function ($form) {
+
         $form->text('id', __('User ID'))->attribute('readonly');
         $form->text('name', __('Name'));
         $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
@@ -202,61 +205,67 @@ class UserController extends AdminController
         $form->text('device_token', __('Device token'))->attribute('readonly');
         $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
 
-        $form->divider('Personal Information');
-        $form->text('profile.address','Address Line 1');
-        $form->text('profile.address2','Address Line 2');
-        $form->text('profile.city','City');
-        $form->number('profile.postcode','Postcode');
-        $form->select('profile.state','State')->options([
-            'Pahang' => 'Pahang',
-            'Melaka' => 'Melaka',
-            'Johor' => 'Johor',
-            'Negeri Sembilan' => 'Negeri Sembilan',
-            'Selangor' => 'Selangor',
-            'Kuala Lumpur' => 'Kuala Lumpur',
-            'Putrajaya' => 'Putrajaya',
-            'Perak' => 'Perak',
-            'Kedah' => 'Kedah',
-            'Pulau Pinang' => 'Pulau Pinang',
-            'Perlis' => 'Perlis',
-            'Kelantan' => 'Kelantan',
-            'Terengganu' => 'Terengganu',
-            'Kelantan' => 'Kelantan',
-            'Sabah' => 'Sabah',
-            'Sarawak' => 'Sarawak',
-            'Labuan' => 'Labuan'
-        ]);
         
-        $form->divider('Company Information');
-        $form->text('profile.company_name','Company Name');
-        $form->text('profile.roc_no','Company ROC Number');
-        $form->text('profile.company_address1','Company Address Line 1');
-        $form->text('profile.company_address2','Company Address Line 2');
-        $form->text('profile.company_city','Company City');
-        $form->number('profile.company_postcode','Company Postcode');
-        $form->select('profile.company_state','Company State')->options([
-            'Pahang' => 'Pahang',
-            'Melaka' => 'Melaka',
-            'Johor' => 'Johor',
-            'Negeri Sembilan' => 'Negeri Sembilan',
-            'Selangor' => 'Selangor',
-            'Kuala Lumpur' => 'Kuala Lumpur',
-            'Putrajaya' => 'Putrajaya',
-            'Perak' => 'Perak',
-            'Kedah' => 'Kedah',
-            'Pulau Pinang' => 'Pulau Pinang',
-            'Perlis' => 'Perlis',
-            'Kelantan' => 'Kelantan',
-            'Terengganu' => 'Terengganu',
-            'Kelantan' => 'Kelantan',
-            'Sabah' => 'Sabah',
-            'Sarawak' => 'Sarawak',
-            'Labuan' => 'Labuan'
-        ]);
 
-        $form->text('profile.user_id')->value($form->id);
-        $form->text('profile.full_name')->value($form->name);
-        $form->text('profile.id_type')->value('MyKad');
+            $form->divider('Personal Information');
+            $form->text('profile.address','Address Line 1');
+            $form->text('profile.address2','Address Line 2');
+            $form->text('profile.city','City');
+            $form->number('profile.postcode','Postcode');
+            $form->select('profile.state','State')->options([
+                'Pahang' => 'Pahang',
+                'Melaka' => 'Melaka',
+                'Johor' => 'Johor',
+                'Negeri Sembilan' => 'Negeri Sembilan',
+                'Selangor' => 'Selangor',
+                'Kuala Lumpur' => 'Kuala Lumpur',
+                'Putrajaya' => 'Putrajaya',
+                'Perak' => 'Perak',
+                'Kedah' => 'Kedah',
+                'Pulau Pinang' => 'Pulau Pinang',
+                'Perlis' => 'Perlis',
+                'Kelantan' => 'Kelantan',
+                'Terengganu' => 'Terengganu',
+                'Kelantan' => 'Kelantan',
+                'Sabah' => 'Sabah',
+                'Sarawak' => 'Sarawak',
+                'Labuan' => 'Labuan'
+            ]);
+        });
+
+        $form->column(1/2, function ($form) {
+        
+            $form->divider('Company Information');
+            $form->text('profile.company_name','Company Name');
+            $form->text('profile.roc_no','Company ROC Number');
+            $form->text('profile.company_address1','Company Address Line 1');
+            $form->text('profile.company_address2','Company Address Line 2');
+            $form->text('profile.company_city','Company City');
+            $form->number('profile.company_postcode','Company Postcode');
+            $form->select('profile.company_state','Company State')->options([
+                'Pahang' => 'Pahang',
+                'Melaka' => 'Melaka',
+                'Johor' => 'Johor',
+                'Negeri Sembilan' => 'Negeri Sembilan',
+                'Selangor' => 'Selangor',
+                'Kuala Lumpur' => 'Kuala Lumpur',
+                'Putrajaya' => 'Putrajaya',
+                'Perak' => 'Perak',
+                'Kedah' => 'Kedah',
+                'Pulau Pinang' => 'Pulau Pinang',
+                'Perlis' => 'Perlis',
+                'Kelantan' => 'Kelantan',
+                'Terengganu' => 'Terengganu',
+                'Kelantan' => 'Kelantan',
+                'Sabah' => 'Sabah',
+                'Sarawak' => 'Sarawak',
+                'Labuan' => 'Labuan'
+            ]);
+
+            $form->text('profile.user_id')->value($form->id);
+            $form->text('profile.full_name')->value($form->name);
+            $form->text('profile.id_type')->value('MyKad');
+        });
 
         return $form;
     }
