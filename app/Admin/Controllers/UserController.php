@@ -128,7 +128,7 @@ class UserController extends AdminController
 
         $show->transaction('Transaction', function ($transaction) {
 
-            $transaction->setResource('/transactions');
+            $transaction->setResource('/manage/admin/transactions');
         
             $transaction->id(__('ID'));
             $transaction->agency()->agency_name('Agency');
@@ -171,7 +171,7 @@ class UserController extends AdminController
 
         $show->feedback('Feedback', function ($feedback) {
 
-            $feedback->setResource('/feedback');
+            $feedback->setResource('/manage/admin/feedback');
         
             $feedback->agency()->agency_name('Agency');
             $feedback->title('Title');
