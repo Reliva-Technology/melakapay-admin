@@ -24,7 +24,13 @@ class HomeController extends Controller
                     $column->append(HomeController::paymentMode());
                 });
                 
-                $row->column(9, function (Column $column) {
+                
+            })
+            ->row(function (Row $row) {
+                $row->column(6, function (Column $column) {
+                    $column->append(HomeController::transaction());
+                });
+                $row->column(6, function (Column $column) {
                     $column->append(HomeController::visitor());
                 });
             });
@@ -46,12 +52,27 @@ class HomeController extends Controller
         $visitor = DB::table('visitors')
             ->select(DB::raw('count(id) as count, date'))
             ->groupBy('date')
-            ->limit(10)
+            ->orderBy('id', 'desc')
+            ->limit(30)
             ->get()
             ->pluck('count', 'date')
             ->toArray();
         $bar = view('admin.charts.user', compact('visitor'));
-        return new Box('Visitor (last 10 days)', $bar);
+        return new Box('Visitor (last 30 days)', $bar);
+    }
+
+    public function transaction()
+    {
+        $transaction = DB::table('transaction_details')
+            ->select(DB::raw('count(id) as count, agency'))
+            ->where('agency','not LIKE', '%|%')
+            ->groupBy('agency')
+            ->orderBy('id', 'desc')
+            ->get()
+            ->pluck('count', 'agency')
+            ->toArray();
+        $bar = view('admin.charts.transaction', compact('transaction'));
+        return new Box('Transaction by Agency', $bar);
     }
 
     public function about(Content $content)

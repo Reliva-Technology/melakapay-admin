@@ -1,7 +1,8 @@
-<canvas id="visitor" height="200"></canvas>
+<canvas id="visitor" height="400"></canvas>
 <script>
 $(function () {
 
+    var count = 1;
     var config = {
         type: 'line',
         data: {
@@ -17,7 +18,7 @@ $(function () {
             }],
             labels: [
                 @foreach($visitor as $key => $value)
-                {{ $key }},
+                count++,
                 @endforeach
             ]
         },
@@ -25,6 +26,20 @@ $(function () {
             maintainAspectRatio: false,
             legend: {
                 display: false
+            },
+            scales:     {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Day'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Visitor'
+                    }
+                }]
             }
         }
     };

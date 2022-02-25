@@ -9,6 +9,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Carbon\Carbon as Carbon;
 use CodeDredd\Soap\Facades\Soap;
+use App\Admin\Actions\CarianPersendirian\SearchCarianPersendirian;
 
 class CarianPersendirianController extends AdminController
 {
@@ -54,6 +55,10 @@ class CarianPersendirianController extends AdminController
         });
 
         $grid->disableCreateButton();
+
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append(new SearchCarianPersendirian());
+        });
 
         return $grid;
     }
