@@ -31,7 +31,14 @@ class TransactionController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Transaction());
-        $grid->model()->orderBy('id', 'desc');
+
+        $start = Carbon::now()->startOfDay();
+        $end = Carbon::now()->endOfDay();
+
+        $grid->model()
+            ->where('agency','LIKE','%-app')
+            ->whereBetween('modified',[$start,$end])
+            ->orderBy('id', 'desc');
         
         $grid->column('agency.agency_name', __('Agency'));
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
@@ -49,7 +56,7 @@ class TransactionController extends AdminController
             $filter->disableIdFilter();
         
             // Add a column filter
-            $filter->between('modified', 'Date Range')->date();
+            $filter->between('modified', 'Date/Time Range')->datetime();
             $filter->like('epx_trns_no', 'EPS Transaction ID');
             $filter->like('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
