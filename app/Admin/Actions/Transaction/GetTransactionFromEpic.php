@@ -20,7 +20,7 @@ class GetTransactionFromEpic extends RowAction
         if($epic){
 
             # update transaction
-            $transaction = \DB::table('transaction_details')
+            \DB::table('transaction_details')
                 ->where('id', $model['id'])
                 ->update([
                     'status' => $epic->eps_status,
@@ -28,6 +28,8 @@ class GetTransactionFromEpic extends RowAction
                     'receipt_no' => $epic->receipt_no,
                     'modified' => Carbon::now()
                 ]);
+
+            $transaction = \DB::table('transaction_details')->find($model['id']);
 
             # clone user if required
             $user = User::find($transaction->user_id);
