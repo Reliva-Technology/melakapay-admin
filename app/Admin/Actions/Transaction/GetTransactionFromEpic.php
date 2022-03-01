@@ -6,6 +6,8 @@ use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon as Carbon;
+use App\Models\User;
+use App\Models\Profile;
 
 class GetTransactionFromEpic extends RowAction
 {
@@ -27,9 +29,27 @@ class GetTransactionFromEpic extends RowAction
                     'modified' => Carbon::now()
                 ]);
 
+            # clone user if required
+            $user = User::find($transaction->user_id);
+            $ebayar_user_details = Profile::where('id_no', $user->username)->first();
+
+            if(!$ebayar_user_details){
+
+                $ebayar_details = [
+                    'user_id' => $user->id,
+                    'full_name' => $user->name,
+                    'id_type' => 'MyKad Number',
+                    'id_no' => $user->username,
+                    'email' => $user->email,
+                    'modified' => now()
+                ];
+    
+                DB::table('user_details')->insert($ebayar_details);
+            }
+
             # generate receipt
-            if($epic->receipt_no != NULL){
-                
+            if($epic->receipt_no != NULL)
+            {
                 return $this->response()->success('Successfully get transaction details from EPIC.');
                 
             } else {
