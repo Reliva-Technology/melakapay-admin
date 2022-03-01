@@ -4,7 +4,6 @@ namespace App\Admin\Actions\Transaction;
 
 use Encore\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 use DB;
 use Carbon\Carbon as Carbon;
 
@@ -31,15 +30,13 @@ class GetTransactionFromEpic extends RowAction
             # generate receipt
             if($epic->receipt_no != NULL){
                 
-                $url = env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id);
-                $response = Http::get($url);
-                dd($response);
-                
-                if($response->body() == 'Successful'){
+                if($response){
                     return $this->response()->success('Successfully get transaction details from EPIC.');
                 } else {
                     return $this->response()->error('Cannot generate receipt in EPIC. Only successful transaction can generate receipt or this receipt already exist.');
                 }
+            } else {
+                return $this->response()->warning('Cannot retrieve transaction records from EPIC.');
             }
 
         } else {

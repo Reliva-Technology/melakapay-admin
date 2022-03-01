@@ -118,9 +118,22 @@ class TransactionController extends AdminController
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
         $show->field('modified', __('Created at'));
-        $show->id(__('Action'))->unescape()->as(function ($id) {
-            return '<a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$id.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
-        });
+
+        $receipt = DB::table('receipts')->where('merchant_transaction_id', $id)->first();
+
+        if($receipt){
+
+            $show->id(__('Action'))->unescape()->as(function ($data) {
+                return '<a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+            });
+
+        } else {
+
+            $show->id(__('Action'))->unescape()->as(function ($data) {
+                $epic = DB::connection('epic')->table('eps_transactions')->where('merchant_trans_id', $data)->first();
+                return '<a href="'.env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id).'" class="btn btn-sm btn-success" title="Generate Receipt" target="_blank">Generate Receipt</a> <a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+            });
+        }
 
         $show->user(__('User'), function ($user){
             $user->setResource('/users');
