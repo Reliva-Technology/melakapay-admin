@@ -33,6 +33,7 @@ class GetTransactionFromEpic extends RowAction
                 
                 $url = env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id);
                 $response = Http::get($url);
+                dd($response);
                 
                 if($response->body() == 'Successful'){
                     return $this->response()->success('Successfully get transaction details from EPIC.');
