@@ -30,11 +30,8 @@ class GetTransactionFromEpic extends RowAction
             # generate receipt
             if($epic->receipt_no != NULL){
                 
-                if($response){
-                    return $this->response()->success('Successfully get transaction details from EPIC.');
-                } else {
-                    return $this->response()->error('Cannot generate receipt in EPIC. Only successful transaction can generate receipt or this receipt already exist.');
-                }
+                return $this->response()->success('Successfully get transaction details from EPIC.');
+                
             } else {
                 return $this->response()->warning('Cannot retrieve transaction records from EPIC.');
             }
