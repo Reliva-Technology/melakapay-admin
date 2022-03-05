@@ -31,11 +31,8 @@ class ProfileController extends AdminController
         $grid->column('user_id', __('User ID'));
         $grid->column('id_type', __('ID type'));
         $grid->column('id_no', __('ID No.'));
-        $grid->column('address', __('Address'));
-        $grid->column('address2', __('Address2'));
-        $grid->column('postcode', __('Postcode'));
-        $grid->column('city', __('City'));
-        $grid->column('state', __('State'));
+        $grid->column('full_name', __('Full Name'));
+
         $grid->column('phone_no', __('Phone No.'));
         return $grid;
     }
@@ -54,6 +51,7 @@ class ProfileController extends AdminController
         $show->field('user_id', __('User ID'));
         $show->field('id_type', __('ID type'));
         $show->field('id_no', __('ID No.'));
+        $show->field('full_name', __('Full Name'));
         $show->field('address', __('Address Line 1'));
         $show->field('address2', __('Address Line 2'));
         $show->field('postcode', __('Postcode'));
@@ -90,6 +88,7 @@ class ProfileController extends AdminController
             $form->text('user_id', __('User ID'));
             $form->text('id_type', __('ID type'));
             $form->text('id_no', __('ID Number'));
+            $form->text('full_name', __('Full Name'));
             $form->text('phone_no', __('Phone Number'));
             $form->textarea('address', __('Address'));
             $form->textarea('address2', __('Address2'));
