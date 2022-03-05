@@ -90,22 +90,22 @@ class ProfileController extends AdminController
             $form->text('id_no', __('ID Number'));
             $form->text('full_name', __('Full Name'));
             $form->text('phone_no', __('Phone Number'));
-            $form->textarea('address', __('Address'));
-            $form->textarea('address2', __('Address2'));
-            $form->number('postcode', __('Postcode'));
-            $form->text('city', __('City'));
-            $form->text('state', __('State'));
+            $form->textarea('address', __('Address'))->rules('nullable');
+            $form->textarea('address2', __('Address2'))->rules('nullable');
+            $form->number('postcode', __('Postcode'))->rules('nullable');
+            $form->text('city', __('City'))->rules('nullable');
+            $form->text('state', __('State'))->rules('nullable');
         });
 
         $form->column(1/2, function ($form) {
 
-            $form->text('company_name', __('Company Name'));
-            $form->text('roc_no', __('ROC No'));
-            $form->textarea('company_address1', __('Company Address Line 1'));
-            $form->textarea('company_address2', __('Company Address Line 2'));
-            $form->number('company_postcode', __('Company Postcode'));
-            $form->text('company_city', __('Company City'));
-            $form->text('company_state', __('Company State'));
+            $form->text('company_name', __('Company Name'))->rules('nullable');
+            $form->text('roc_no', __('ROC No'))->rules('nullable');
+            $form->textarea('company_address1', __('Company Address Line 1'))->rules('nullable');
+            $form->textarea('company_address2', __('Company Address Line 2'))->rules('nullable');
+            $form->number('company_postcode', __('Company Postcode'))->rules('nullable');
+            $form->text('company_city', __('Company City'))->rules('nullable');
+            $form->text('company_state', __('Company State'))->rules('nullable');
         });
 
         return $form;
