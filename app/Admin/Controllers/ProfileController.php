@@ -87,7 +87,7 @@ class ProfileController extends AdminController
 
         $form->column(1/2, function ($form) {
 
-            $form->text('user_id', __('User ID'))->disable();
+            $form->text('user_id', __('User ID'));
             $form->text('id_type', __('ID type'));
             $form->text('id_no', __('ID Number'));
             $form->text('phone_no', __('Phone Number'));
