@@ -108,7 +108,7 @@ class TransactionController extends AdminController
                 $show->field($b, $a);
             }
         }
-        var_dump($details['data']['fpx_details']);
+
         if(isset($details['data']['payment_details'])){
             foreach($details['data']['payment_details'] as $k => $v){
                 $show->field($v, $k)->unescape();
