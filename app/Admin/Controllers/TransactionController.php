@@ -63,10 +63,10 @@ class TransactionController extends AdminController
             $filter->equal('status', 'Status')->radio(
                 [
                     '' => 'All',
-                    1 => 'Success',
-                    0 => 'Failed',
-                    2 => 'Cancelled',
-                    3 => 'Pending'
+                    '0' => 'Attempt Payment',
+                    '1' => 'Successful',
+                    '2' => 'Failed',
+                    '3' => 'Pending'
                 ]
             );
             $filter->like('payment_type', 'Payment Type')->radio(
