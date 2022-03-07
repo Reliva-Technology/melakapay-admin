@@ -65,6 +65,7 @@ class HomeController extends Controller
     {
         $transaction = DB::table('transaction_details')
             ->select(DB::raw('count(id) as count, agency'))
+            ->where('agency','LIKE', '%-app')
             ->where('agency','not LIKE', '%|%')
             ->groupBy('agency')
             ->orderBy('id', 'desc')
