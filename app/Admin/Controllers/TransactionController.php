@@ -38,7 +38,7 @@ class TransactionController extends AdminController
 
         $grid->model()
             ->where('agency','LIKE','%-app')
-            //->whereBetween('modified',[$start,$end])
+            ->whereBetween('modified',[$start,$end])
             ->orderBy('id', 'desc');
         
         $grid->column('agency.agency_name', __('Agency'));
