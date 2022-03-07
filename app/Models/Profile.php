@@ -32,4 +32,9 @@ class Profile extends Model
         'city' => 'string',
         'state' => 'string'
     ];
+    
+    public function ebayar()
+    {
+        return $this->hasOne(Ebayar::class, 'user_id', 'id');
+    }
 }

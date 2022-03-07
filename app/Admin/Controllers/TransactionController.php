@@ -13,6 +13,7 @@ use Encore\Admin\Widgets\Box;
 use DB;
 use Carbon\Carbon;
 use App\Admin\Actions\Transaction\GetTransactionFromEpic;
+use Illuminate\Support\Facades\Http;
 
 class TransactionController extends AdminController
 {
@@ -37,7 +38,7 @@ class TransactionController extends AdminController
 
         $grid->model()
             ->where('agency','LIKE','%-app')
-            ->whereBetween('modified',[$start,$end])
+            //->whereBetween('modified',[$start,$end])
             ->orderBy('id', 'desc');
         
         $grid->column('agency.agency_name', __('Agency'));
@@ -46,7 +47,7 @@ class TransactionController extends AdminController
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
         });
-        $grid->column('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
+        $grid->column('status', __('Status'))->using(['0' => 'Attempt Payment', '1' => 'Successful', '2' => 'Failed', '3' => 'Pending']);
         $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
         $grid->column('modified', __('Date'));
 
@@ -56,7 +57,7 @@ class TransactionController extends AdminController
             $filter->disableIdFilter();
         
             // Add a column filter
-            $filter->between('modified', 'Date/Time Range')->datetime();
+            $filter->between('modified', 'Date Range')->date();
             $filter->like('epx_trns_no', 'EPS Transaction ID');
             $filter->like('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
@@ -79,15 +80,7 @@ class TransactionController extends AdminController
         
         });
 
-        $grid->header(function ($query) {
-            $method = $query->select(DB::raw('count(payment_type) as count, payment_type'))
-                ->groupBy('payment_type')->get()->pluck('count', 'payment_type')->toArray();
-            $doughnut = view('admin.charts.payment-mode', compact('method'));
-            //return new Box('Payment Mode', $doughnut);
-        });
-
         $grid->actions(function ($actions) {
-            //$actions->disableEdit();
             $actions->disableDelete();
             $actions->add(new GetTransactionFromEpic);
         });
@@ -106,6 +99,21 @@ class TransactionController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Transaction::findOrFail($id));
+
+        $response = Http::get(env('MELAKAPAY_URL').'/api/transactions/'.$id);
+        $details = json_decode($response->body(),true);
+
+        if(isset($details['data']['fpx_details'])){
+            foreach($details['data']['fpx_details'] as $a => $b){
+                $show->field($b, $a);
+            }
+        }
+        var_dump($details['data']['fpx_details']);
+        if(isset($details['data']['payment_details'])){
+            foreach($details['data']['payment_details'] as $k => $v){
+                $show->field($v, $k)->unescape();
+            }
+        }
 
         $show->field('id', __('ID'));
         $show->field('agency_id', __('Agency ID'));
@@ -131,7 +139,7 @@ class TransactionController extends AdminController
 
             $show->id(__('Action'))->unescape()->as(function ($data) {
                 $epic = DB::connection('epic')->table('eps_transactions')->where('merchant_trans_id', $data)->first();
-                return '<a href="'.env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id).'" class="btn btn-sm btn-success" title="Generate Receipt" target="_blank">Generate Receipt</a> <a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+                return '<a href="'.env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id).'" class="btn btn-sm btn-success" title="Retrieve latest status" target="_blank">Retrieve latest status</a> <a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
             });
         }
 
@@ -139,9 +147,6 @@ class TransactionController extends AdminController
             $user->setResource('/users');
             $user->name();
             $user->email();
-            $user->id(__('Action'))->unescape()->as(function ($user_id) {
-                return '<a href="'.url('/carian-persendirian/add-carian-persendirian').'/'.$user_id.'" class="btn btn-sm btn-success" title="Carian Persendirian">Carian Persendirian</a>';
-            });
 
             $user->panel()->tools(function ($tools) {
                 $tools->disableEdit();
