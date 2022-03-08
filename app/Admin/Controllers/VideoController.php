@@ -2,67 +2,46 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Upload;
+use App\Models\Video;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class UploadController extends AdminController
+class VideoController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
-    protected $title = 'Upload';
+    protected $title = 'Video';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
-        $grid = new Grid(new Upload());
+        $grid = new Grid(new Video());
 
         $grid->column('id', __('ID'))->sortable();
         $grid->column('title', __('Title'))->sortable();
         $grid->column('description', __('Description'));
-        $grid->column('file_url', __('File'));
+        $grid->column('file_url', __('URL'));
 
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
-        $show = new Show(Upload::findOrFail($id));
+        $show = new Show(Video::findOrFail($id));
 
         $show->field('title', __('Title'));
         $show->field('description', __('Description'));
-        $show->file_url()->file();
+        $show->file_url()->link();
 
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
     protected function form()
     {
-        $form = new Form(new Upload());
+        $form = new Form(new Video());
 
         $form->text('title', __('Title'))->help('Separate by | for dual language title');
         $form->textarea('description', __('Description'))->help('Separate by | for dual language description');
-        $form->file('file_url', __('File'))->rules('mimes:pdf')->removable();
+        $form->url('file_url', __('Video URL'));
 
         return $form;
     }
