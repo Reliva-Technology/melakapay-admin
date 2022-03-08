@@ -19,7 +19,7 @@ class VideoController extends AdminController
         $grid->column('id', __('ID'))->sortable();
         $grid->column('title', __('Title'))->sortable();
         $grid->column('description', __('Description'));
-        $grid->column('file_url', __('URL'));
+        $grid->column('file_url', __('Video ID'))->help('Only paste the video ID here');
 
         return $grid;
     }
@@ -30,7 +30,7 @@ class VideoController extends AdminController
 
         $show->field('title', __('Title'));
         $show->field('description', __('Description'));
-        $show->file_url()->link();
+        $show->file_url();
 
         return $show;
     }
@@ -41,7 +41,7 @@ class VideoController extends AdminController
 
         $form->text('title', __('Title'))->help('Separate by | for dual language title');
         $form->textarea('description', __('Description'))->help('Separate by | for dual language description');
-        $form->url('file_url', __('Video URL'));
+        $form->text('file_url', __('Video ID'))->help('Only paste the video ID here');
 
         return $form;
     }

@@ -62,7 +62,7 @@ class UploadController extends AdminController
 
         $form->text('title', __('Title'))->help('Separate by | for dual language title');
         $form->textarea('description', __('Description'))->help('Separate by | for dual language description');
-        $form->file('file_url', __('File'))->rules('mimes:pdf')->removable();
+        $form->file('file_url', __('File'))->rules('mimes:pdf,png,jpg,jpeg')->removable();
 
         return $form;
     }
