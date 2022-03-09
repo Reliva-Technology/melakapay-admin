@@ -10,6 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use App\Admin\Actions\User\ResetPassword;
 use App\Admin\Actions\User\SetUsernameAsPassword;
+use App\Admin\Actions\User\ImpersonateUser;
 use Carbon\Carbon as Carbon;
 use Encore\Admin\Widgets\Box;
 use DB;
@@ -60,6 +61,7 @@ class UserController extends AdminController
         $grid->actions(function ($actions) {
             $actions->add(new ResetPassword);
             $actions->add(new SetUsernameAsPassword);
+            $actions->add(new ImpersonateUser);
             $actions->disableDelete();
         });
 

@@ -146,6 +146,10 @@ class TransactionController extends AdminController
             $user->email();
             $user->id('User ID');
 
+            $user->id(__('Action'))->unescape()->as(function ($data) {
+                return '<a href="'.env('MELAKAPAY_URL').'impersonate/'.$data.'" class="btn btn-sm btn-danger" title="View Receipt" target="_blank">Login as this user</a>';
+            });
+
             $user->panel()->tools(function ($tools) {
                 $tools->disableEdit();
                 $tools->disableList();

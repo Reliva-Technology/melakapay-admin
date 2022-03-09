@@ -43,4 +43,9 @@ class SetUsernameAsPassword extends RowAction
         return $this->response()->success('Temporary password set successfully.');
     }
 
+    public function dialog()
+    {
+        $this->confirm('Are you sure?');
+    }
+
 }
