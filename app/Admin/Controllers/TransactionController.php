@@ -111,13 +111,14 @@ class TransactionController extends AdminController
         $show->field('payment_type', __('Payment mode'));
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
-        $show->field('modified', __('Created at'));
+        $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
+        $show->field('date_payment', __('Payment Date/Time'));
 
         $receipt = DB::table('receipts')->where('merchant_transaction_id', $id)->first();
 
         if($receipt){
 
-            if($show->status()->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']) == '1'){
+            if($show->status() == '1'){
 
                 $show->id(__('Action'))->unescape()->as(function ($data) {
                     return '<a href="'.env('MELAKAPAY_URL').'storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
