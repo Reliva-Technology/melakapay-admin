@@ -22,4 +22,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function receipt()
+    {
+        return $this->hasOne(Receipt::class, 'merchant_transaction_id');
+    }
 }

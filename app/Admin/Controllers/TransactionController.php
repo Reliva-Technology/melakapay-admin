@@ -9,26 +9,16 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Widgets\Box;
 use DB;
 use Carbon\Carbon;
 use App\Admin\Actions\Transaction\GetTransactionFromEpic;
 use Illuminate\Support\Facades\Http;
+Use Encore\Admin\Admin;
 
 class TransactionController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'Transaction';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
         $grid = new Grid(new Transaction());
@@ -38,18 +28,18 @@ class TransactionController extends AdminController
 
         $grid->model()
             ->where('agency','LIKE','%-app')
-            ->whereBetween('modified',[$start,$end])
+            //->whereBetween('modified',[$start,$end])
             ->orderBy('id', 'desc');
         
+        $grid->column('modified', __('Payment Date/Time'));
         $grid->column('agency.agency_name', __('Agency'));
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
-        });
+        })->totalRow();
         $grid->column('status', __('Status'))->using(['0' => 'Attempt Payment', '1' => 'Successful', '2' => 'Failed', '3' => 'Pending']);
         $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
-        $grid->column('modified', __('Date'));
 
         $grid->filter(function($filter){
 
@@ -90,30 +80,27 @@ class TransactionController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
         $show = new Show(Transaction::findOrFail($id));
 
-        $response = Http::get(env('MELAKAPAY_URL').'/api/transactions/'.$id);
-        $details = json_decode($response->body(),true);
+        $show->receipt(__('FPX Details'), function ($receipt){
+            $receipt->field('ic_no', __('IC No'));
+            $receipt->field('account_no', __('Account No'));
+            $receipt->field('payment_type', __('Payment Type'));
+            $receipt->field('transaction_date_time', __('Transaction Date/Time'));
+            $receipt->field('payment_from', __('Payment From'));
+            $receipt->field('fpx_charge', __('FPX Charge'));
+            $receipt->field('buyer_bank', __('Buyer Bank'));
+            $receipt->field('fpx_transaction_no', __('FPX Transaction No'));
+            $receipt->field('seller_order_no', __('Seller Order No'));
 
-        if(isset($details['data']['fpx_details'])){
-            foreach($details['data']['fpx_details'] as $a => $b){
-                $show->field($b, $a);
-            }
-        }
-
-        if(isset($details['data']['payment_details'])){
-            foreach($details['data']['payment_details'] as $k => $v){
-                $show->field($v, $k)->unescape();
-            }
-        }
+            $receipt->panel()->tools(function ($tools) {
+                $tools->disableEdit();
+                $tools->disableList();
+                $tools->disableDelete();
+            });
+        });
 
         $show->field('id', __('ID'));
         $show->field('agency_id', __('Agency ID'));
@@ -122,7 +109,6 @@ class TransactionController extends AdminController
             return number_format($amount,2);
         });
         $show->field('payment_type', __('Payment mode'));
-        $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
         $show->field('modified', __('Created at'));
@@ -131,22 +117,34 @@ class TransactionController extends AdminController
 
         if($receipt){
 
-            $show->id(__('Action'))->unescape()->as(function ($data) {
-                return '<a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
-            });
+            if($show->status()->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']) == '1'){
+
+                $show->id(__('Action'))->unescape()->as(function ($data) {
+                    return '<a href="'.env('MELAKAPAY_URL').'storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+                });
+
+            } else {
+
+                $show->id(__('Action'))->unescape()->as(function ($data) {
+                    return '<a href="'.env('MELAKAPAY_URL').'storage/'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Proof of Payment" target="_blank">View Proof of Payment</a>';
+                });
+
+            }
 
         } else {
 
             $show->id(__('Action'))->unescape()->as(function ($data) {
                 $epic = DB::connection('epic')->table('eps_transactions')->where('merchant_trans_id', $data)->first();
-                return '<a href="'.env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id).'" class="btn btn-sm btn-success" title="Retrieve latest status" target="_blank">Retrieve latest status</a> <a href="https://melakapay.melaka.gov.my/storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+                return '<a href="'.env('EPAYMENT_URL').'/eps/response/'.base64_encode($epic->id).'" class="btn btn-sm btn-success" title="Retrieve latest status" target="_blank">Retrieve latest status</a>';
             });
         }
 
         $show->user(__('User'), function ($user){
             $user->setResource('/users');
             $user->name();
+            $user->username();
             $user->email();
+            $user->id('User ID');
 
             $user->panel()->tools(function ($tools) {
                 $tools->disableEdit();
