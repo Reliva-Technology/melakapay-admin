@@ -141,7 +141,7 @@ class UserController extends AdminController
             $transaction->modified(__('Created at'));
 
             $transaction->actions(function ($actions) {
-                $actions->add(new GetTransactionFromEpic);
+                $actions->add(new GetTransactionFromEpic)->disableEdit()->disableDelete();
             });
 
             $transaction->filter(function($filter){
@@ -157,8 +157,8 @@ class UserController extends AdminController
                     [
                         '' => 'All',
                         1 => 'Success',
-                        0 => 'Failed',
-                        2 => 'Cancelled',
+                        0 => 'Attempt Payment',
+                        2 => 'Failed',
                         3 => 'Pending'
                     ]
                 );

@@ -27,8 +27,8 @@ class TransactionController extends AdminController
         $end = Carbon::now()->endOfDay();
 
         $grid->model()
-            ->where('agency','LIKE','%-app')
-            //->whereBetween('modified',[$start,$end])
+            ->app()
+            ->whereBetween('modified',[$start,$end])
             ->orderBy('id', 'desc');
         
         $grid->column('modified', __('Payment Date/Time'));
@@ -37,7 +37,7 @@ class TransactionController extends AdminController
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
-        })->totalRow();
+        });
         $grid->column('status', __('Status'))->using(['0' => 'Attempt Payment', '1' => 'Successful', '2' => 'Failed', '3' => 'Pending']);
         $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
 
@@ -71,7 +71,7 @@ class TransactionController extends AdminController
         });
 
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
+            $actions->disableEdit()->disableDelete();
             $actions->add(new GetTransactionFromEpic);
         });
 
