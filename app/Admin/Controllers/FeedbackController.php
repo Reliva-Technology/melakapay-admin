@@ -34,7 +34,7 @@ class FeedbackController extends AdminController
         $grid->column('title', __('Title'));
         $grid->column('message', __('Message'));
         $grid->column('user.name', __('User Name'));
-        $grid->column('status', __('Status'))->bool();
+        $grid->column('status', __('Status'));
         $grid->created_at()->display(function ($created) {
             return Carbon::parse($created)->diffForHumans();
         });
