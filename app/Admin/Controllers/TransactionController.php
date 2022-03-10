@@ -42,12 +42,9 @@ class TransactionController extends AdminController
         $grid->column('payment_type', __('FPX'))->using(['fpx' => 'Individual', 'fpx1' => 'Corporate']);
 
         $grid->filter(function($filter){
-
-            // Remove the default id filter
-            $filter->disableIdFilter();
         
             // Add a column filter
-            $filter->between('modified', 'Date Range')->date();
+            $filter->between('modified', 'Date/Time Range')->datetime();
             $filter->like('epx_trns_no', 'EPS Transaction ID');
             $filter->like('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
