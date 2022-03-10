@@ -92,6 +92,10 @@ class ContactController extends AdminController
     {
         $form = new Form(new Contact());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
         $form->textarea('address', __('Address'));
         $form->email('email', __('E-mail'));

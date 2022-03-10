@@ -79,6 +79,10 @@ class AgencyServiceController extends AdminController
     {
         $form = new Form(new AgencyService);
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->display('id', __('ID'));
         $form->text('host_url', __('URL'));
         $form->text('api_url', __('API'));

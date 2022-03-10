@@ -60,6 +60,10 @@ class UploadController extends AdminController
     {
         $form = new Form(new Upload());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->text('title', __('Title'))->help('Separate by | for dual language title');
         $form->textarea('description', __('Description'))->help('Separate by | for dual language description');
         $form->file('file_url', __('File'))->rules('mimes:pdf,png,jpg,jpeg')->removable();

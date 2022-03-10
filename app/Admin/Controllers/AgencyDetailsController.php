@@ -74,6 +74,10 @@ class AgencyDetailsController extends AdminController
     {
         $form = new Form(new AgencyDetails());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->select('agency_id', __('Agency'))
             ->options(Agency::all()->pluck('agency_name','id'))
             ->required();

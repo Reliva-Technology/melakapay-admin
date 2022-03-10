@@ -195,19 +195,21 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->column(1/2, function ($form) {
 
-        $form->text('id', __('User ID'))->attribute('readonly');
-        $form->text('name', __('Name'));
-        $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
-        $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
-            ->updateRules(['required', "unique:users,username,{{id}}"]);
-        $form->text('remember_token', __('Remember token'))->attribute('readonly');
-        $form->text('api_token', __('Api token'))->attribute('readonly');
-        $form->text('device_token', __('Device token'))->attribute('readonly');
-        $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
-
-        
+            $form->text('id', __('User ID'))->attribute('readonly');
+            $form->text('name', __('Name'));
+            $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
+            $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
+                ->updateRules(['required', "unique:users,username,{{id}}"]);
+            $form->text('remember_token', __('Remember token'))->attribute('readonly');
+            $form->text('api_token', __('Api token'))->attribute('readonly');
+            $form->text('device_token', __('Device token'))->attribute('readonly');
+            $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
 
             $form->divider('Personal Information');
             $form->text('profile.address','Address Line 1');

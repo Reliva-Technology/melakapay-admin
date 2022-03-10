@@ -104,10 +104,14 @@ class ServiceController extends AdminController
     {
         $form = new Form(new Service());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
         $form->text('category', __('Category'))->required();
-        $form->text('sub_category', __('Sub Category'))->required();
-        $form->text('api_url', __('API URL'))->required();
+        $form->text('sub_category', __('Sub Category'));
+        $form->text('api_url', __('API URL'));
         $form->number('ordering', __('Ordering'));
         $form->text('parameter', __('Parameter'));
         $form->text('payment_url', __('Payment URL'));

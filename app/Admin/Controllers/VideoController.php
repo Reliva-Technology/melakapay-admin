@@ -39,6 +39,10 @@ class VideoController extends AdminController
     {
         $form = new Form(new Video());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->text('title', __('Title'))->help('Separate by | for dual language title');
         $form->textarea('description', __('Description'))->help('Separate by | for dual language description');
         $form->text('file_url', __('Video ID'))->help('Only paste the video ID here');

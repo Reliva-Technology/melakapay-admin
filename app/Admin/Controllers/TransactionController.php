@@ -108,23 +108,35 @@ class TransactionController extends AdminController
         $show->amount()->as(function ($amount) {
             return number_format($amount,2);
         });
-        $show->field('payment_type', __('Payment mode'));
+        $show->field('payment_type', __('Payment mode'))->using([
+            'fpx' => 'FPX Individual',
+            'fpx1' => 'FPX Corporate'
+        ]);
         $show->field('epx_trns_no', __('EPS Transaction ID'));
         $show->field('receipt_no', __('Receipt No'));
-        $show->field('status', __('Status'))->using(['0' => 'Failed', '1' => 'Success', '2' => 'Cancelled', '3' => 'Pending']);
+        $show->field('status', __('Status'))->using([
+            '0' => 'Attempt Payment',
+            '1' => 'Successful',
+            '2' => 'Failed',
+            '3' => 'Pending'
+        ]);
         $show->field('date_payment', __('Payment Date/Time'));
 
         $receipt = DB::table('receipts')->where('merchant_transaction_id', $id)->first();
 
         if($receipt){
 
-            if($show->status() == '1'){
+            $test = \File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$id.'.pdf');
+
+            if(\File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$id.'.pdf')){
 
                 $show->id(__('Action'))->unescape()->as(function ($data) {
                     return '<a href="'.env('MELAKAPAY_URL').'storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
                 });
 
-            } else {
+            }
+
+            if(\File::exists(env('MELAKAPAY_STORAGE').$id.'.pdf')){
 
                 $show->id(__('Action'))->unescape()->as(function ($data) {
                     return '<a href="'.env('MELAKAPAY_URL').'storage/'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Proof of Payment" target="_blank">View Proof of Payment</a>';
@@ -175,6 +187,10 @@ class TransactionController extends AdminController
     protected function form()
     {
         $form = new Form(new Transaction());
+
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
 
         $form->text('epx_trns_no', __('EPS Transaction ID'));
         $form->text('receipt_no', __('Receipt No'));

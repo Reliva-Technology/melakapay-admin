@@ -83,6 +83,10 @@ class ProfileController extends AdminController
     {
         $form = new Form(new Profile());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->column(1/2, function ($form) {
 
             $form->text('user_id', __('User ID'));

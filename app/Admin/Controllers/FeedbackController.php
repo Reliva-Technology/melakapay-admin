@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Feedback;
 use App\Models\Agency;
+use App\Models\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -34,7 +35,12 @@ class FeedbackController extends AdminController
         $grid->column('title', __('Title'));
         $grid->column('message', __('Message'));
         $grid->column('user.name', __('User Name'));
-        $grid->column('status', __('Status'));
+        $grid->column('status', __('Status'))->using([
+            'unread' => 'Pending',
+            '0' => 'Pending',
+            '1' => 'Completed',
+            '2' => 'In Progress'
+        ]);
         $grid->created_at()->display(function ($created) {
             return Carbon::parse($created)->diffForHumans();
         });
@@ -51,6 +57,15 @@ class FeedbackController extends AdminController
             $filter->like('title', 'Title');
             $filter->like('message', 'Message');
             $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
+            $filter->equal('status', 'Status')->radio(
+                [
+                    '' => 'All',
+                    '0' => 'Pending',
+                    '1' => 'Completed',
+                    '2' => 'In Progress'
+                ]
+            );
+            $filter->equal('user_id', __('User ID'))->select(User::all()->pluck('name','id'));
         
         });
 
@@ -67,7 +82,7 @@ class FeedbackController extends AdminController
     {
         $show = new Show(Feedback::findOrFail($id));
 
-        $show->field('id', __('Id'));
+        $show->field('id', __('ID'));
         $show->field('agency.agency_name', __('Agency'));
         $show->field('title', __('Title'));
         $show->field('message', __('Message'));
@@ -88,11 +103,19 @@ class FeedbackController extends AdminController
     {
         $form = new Form(new Feedback());
 
-        $form->text('agency_id', __('Agency id'));
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
+        $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'));
         $form->text('title', __('Title'));
         $form->textarea('message', __('Message'));
-        $form->number('user_id', __('User id'));
-        $form->text('status', __('Status'));
+        $form->select('user_id', __('User ID'))->options(User::all()->pluck('name','id'));
+        $form->radio('status', __('Status'))->options([
+            '0' => 'Pending',
+            '1' => 'Completed',
+            '2' => 'In Progress'
+        ]);
 
         return $form;
     }

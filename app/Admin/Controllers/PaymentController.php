@@ -86,6 +86,10 @@ class PaymentController extends AdminController
     {
         $form = new Form(new Payment());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->text('amount', __('Amount'))->default('double');
         $form->text('status_code', __('Status code'));
         $form->text('status_message', __('Status message'));

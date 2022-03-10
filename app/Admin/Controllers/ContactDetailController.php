@@ -74,6 +74,10 @@ class ContactDetailController extends AdminController
     {
         $form = new Form(new ContactDetail());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->select('contact_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->required();
         $form->text('name', __('Name'));
         $form->email('email', __('Email'));

@@ -92,6 +92,10 @@ class FavouriteController extends AdminController
     {
         $form = new Form(new Favourite());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->text('account_no', __('Account no'));
         $form->text('bill_name', __('Bill name'));
         $form->number('user_id', __('User id'));

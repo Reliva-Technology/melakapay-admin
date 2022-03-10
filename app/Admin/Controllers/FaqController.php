@@ -65,6 +65,10 @@ class FaqController extends AdminController
     {
         $form = new Form(new Faq());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->text('question', __('Question'));
         $form->summernote('answer', __('Answer'));
         $status = [

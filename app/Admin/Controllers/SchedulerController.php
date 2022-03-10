@@ -73,6 +73,10 @@ class SchedulerController extends AdminController
     {
         $form = new Form(new Scheduler());
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->column(1/2, function ($form) {
             $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'))->load('service', '/api/service')->required();
             $form->select('service', __('Service'));

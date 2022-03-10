@@ -106,6 +106,10 @@ class AgencyController extends AdminController
     {
         $form = new Form(new Agency);
 
+        $form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        $form->disableViewCheck();
+
         $form->display('id', __('ID'));
         $form->text('agency', __('Code'))->required();
         $form->text('agency_name', __('Name'))->required();
