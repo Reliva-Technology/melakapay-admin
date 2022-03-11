@@ -29,6 +29,7 @@
         "laravel/tinker": "^2.5",
         "nesbot/carbon": "^2.55",
         "rezaamini-ir/migrator": "^1.3",
+        "shvetsgroup/laravel-email-database-log": "*",
         "spatie/laravel-backup": "^6.16"
     },
     "require-dev": {

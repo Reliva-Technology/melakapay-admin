@@ -34,6 +34,7 @@ Route::group([
     $router->get('/carian-persendirian/add-carian-persendirian/{id}','CarianPersendirianController@carian');
     $router->resource('log-sms', SmsLogController::class);
     $router->resource('visitors', VisitorController::class);
+    $router->resource('email-logs', EmailLogController::class);
 
     $router->get('/api/service','SchedulerController@service');
 
