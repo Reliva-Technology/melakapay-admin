@@ -31,6 +31,15 @@ class EmailLogController extends AdminController
         $grid->column('from', __('From'));
         $grid->column('to', __('To'));
         $grid->column('subject', __('Subject'));
+        
+        $grid->filter(function($filter){
+            // Remove the default id filter
+            $filter->disableIdFilter();
+        
+            // Add a column filter
+            $filter->like('to', __('Receipient E-mail'));
+            $filter->between('date', 'Date Sent')->date();
+        });
 
         return $grid;
     }
