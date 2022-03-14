@@ -112,7 +112,7 @@ class FeedbackController extends AdminController
         $form->select('agency_id', __('Agency'))->options(Agency::all()->pluck('agency_name','id'));
         $form->text('title', __('Title'));
         $form->textarea('message', __('Message'));
-        $form->select('user_id', __('User ID'))->options(User::all()->pluck('name','id'));
+        $form->text('user_id', __('User ID'));
         $form->radio('status', __('Status'))->options([
             '0' => 'Pending',
             '1' => 'Completed',
