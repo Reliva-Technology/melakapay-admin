@@ -54,7 +54,7 @@ class EmailLogController extends AdminController
         $show->field('subject', __('Subject'));
         $show->field('body', __('Body'))->unescape();
         $show->field('headers', __('Headers'))->unescape();
-        $show->field('attachments', __('Attachments'))->unescape();
+        $show->field('attachments', __('Attachments'));
 
         return $show;
     }
