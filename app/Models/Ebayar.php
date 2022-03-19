@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ebayar
+class Ebayar extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     public $table = 'user';
+
+    const CREATED_AT = 'modified';
+    const UPDATED_AT = 'modified';
 
     protected $fillable = [
         'username',
@@ -24,5 +26,10 @@ class Ebayar
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id');
+    }
+
+    public function melakapay()
+    {
+        return $this->hasOne(User::class, 'username', 'username');
     }
 }
