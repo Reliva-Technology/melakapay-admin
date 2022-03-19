@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Transaction extends Model
 {
@@ -22,6 +23,13 @@ class Transaction extends Model
     public function scopeApp($query)
     {
         return $query->where('agency','LIKE','%-app');
+    }
+
+    public function scopeToday($query)
+    {
+        $start = Carbon::now()->startOfDay();
+        $end = Carbon::now()->endOfDay();
+        return $query->whereBetween('modified',[$start,$end]);
     }
 
     public function agency()

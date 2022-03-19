@@ -35,6 +35,6 @@ class Profile extends Model
     
     public function ebayar()
     {
-        return $this->hasOne(Ebayar::class, 'user_id', 'id');
+        return $this->belongsTo(Ebayar::class, 'user_id', 'id');
     }
 }

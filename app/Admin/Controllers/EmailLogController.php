@@ -10,23 +10,13 @@ use Encore\Admin\Show;
 
 class EmailLogController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
-    protected $title = 'EmailLog';
+    protected $title = 'Email Log';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
         $grid = new Grid(new EmailLog());
+        $grid->model()->orderBy('id', 'desc');
 
-        $grid->column('id', __('Id'));
         $grid->column('date', __('Date'));
         $grid->column('from', __('From'));
         $grid->column('to', __('To'));
@@ -41,38 +31,36 @@ class EmailLogController extends AdminController
             $filter->between('date', 'Date Sent')->date();
         });
 
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableEdit();
+        });
+
+        $grid->disableCreateButton()->disableColumnSelector();
+
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
         $show = new Show(EmailLog::findOrFail($id));
 
-        $show->field('id', __('Id'));
         $show->field('date', __('Date'));
         $show->field('from', __('From'));
         $show->field('to', __('To'));
-        $show->field('cc', __('Cc'));
-        $show->field('bcc', __('Bcc'));
         $show->field('subject', __('Subject'));
         $show->field('body', __('Body'))->unescape();
-        $show->field('headers', __('Headers'))->unescape();
+        $show->field('headers', __('Headers'));
         $show->field('attachments', __('Attachments'));
+
+        $show->panel()->tools(function ($tools) {
+            $tools->disableEdit();
+            $tools->disableDelete();
+        });
 
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
     protected function form()
     {
         $form = new Form(new EmailLog());

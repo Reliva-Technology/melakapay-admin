@@ -56,9 +56,9 @@ class CarianPersendirianController extends AdminController
 
         $grid->disableCreateButton();
 
-        $grid->tools(function (Grid\Tools $tools) {
+        /* $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new SearchCarianPersendirian());
-        });
+        }); */
 
         return $grid;
     }

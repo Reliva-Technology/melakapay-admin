@@ -23,15 +23,13 @@ class TransactionController extends AdminController
     {
         $grid = new Grid(new Transaction());
 
-        $start = Carbon::now()->startOfDay();
-        $end = Carbon::now()->endOfDay();
-
         $grid->model()
             ->app()
-            ->whereBetween('modified',[$start,$end])
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'desc')
+            ->take(1000);
         
-        $grid->column('modified', __('Payment Date/Time'));
+        $grid->column('id', __('ID'));
+        $grid->column('modified', __('Payment Date/Time'))->filter('range', 'date');
         $grid->column('agency.agency_name', __('Agency'));
         $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
@@ -44,9 +42,8 @@ class TransactionController extends AdminController
         $grid->filter(function($filter){
         
             // Add a column filter
-            $filter->between('modified', 'Date/Time Range')->datetime();
-            $filter->like('epx_trns_no', 'EPS Transaction ID');
-            $filter->like('receipt_no', 'Receipt No');
+            $filter->equal('epx_trns_no', 'EPS Transaction ID');
+            $filter->equal('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
                 [
                     '' => 'All',
@@ -56,7 +53,7 @@ class TransactionController extends AdminController
                     '3' => 'Pending'
                 ]
             );
-            $filter->like('payment_type', 'Payment Type')->radio(
+            $filter->equal('payment_type', 'Payment Type')->radio(
                 [
                     '' => 'All',
                     'fpx' => 'FPX Individual',
