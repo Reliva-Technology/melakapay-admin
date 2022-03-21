@@ -13,18 +13,8 @@ use App\Admin\Actions\CarianPersendirian\SearchCarianPersendirian;
 
 class CarianPersendirianController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'Carian Persendirian';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
         $grid = new Grid(new CarianPersendirian());
@@ -64,12 +54,6 @@ class CarianPersendirianController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
         $show = new Show(CarianPersendirian::findOrFail($id));
@@ -81,7 +65,7 @@ class CarianPersendirianController extends AdminController
         $show->field('tarikh', __('Tarikh'));
         $show->field('user_id', __('User ID'));
         $show->id_portal_transaksi(__('Action'))->unescape()->as(function ($id_portal_transaksi) {
-            return '<a href="'.url('/carian-persendirian/print-carian-persendirian').'/'.$id_portal_transaksi.'" class="btn btn-sm btn-success" title="Print Carian Persendirian" target="_blank">Print Carian Persendirian</a>';
+            return '<a href="'.url('/admin/carian-persendirian/print-carian-persendirian').'/'.$id_portal_transaksi.'" class="btn btn-sm btn-success" title="Print Carian Persendirian">Print Carian Persendirian</a>';
         });
 
         $show->panel()
@@ -93,29 +77,25 @@ class CarianPersendirianController extends AdminController
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new CarianPersendirian());
-
-        $form->number('id', __('ID'));
-
-        return $form;
-    }
-
     public function print($id)
     {
         $url = 'http://etanah.melaka.gov.my/etanahwsa/CarianPersendirianService?wsdl';
         $client = Soap::baseWsdl($url)->muatTurunDokumen(['idPortalTrans' => $id]);
         $result = json_decode($client->body(),true);
-        $data = $result['return']['bytes'];
-        header('Content-Type: application/pdf');
-        header('Content-disposition: attachment;filename='.$id.'.pdf');
-        echo $data;
+
+        if($result){
+            // update cache bil_paparan count by +1
+            CarianPersendirian::where('id_portal_transaksi', $id)->increment('bil_paparan');
+
+            $data = $result['return']['bytes'];
+            header('Content-Type: application/pdf');
+            header('Content-disposition: attachment;filename='.$id.'.pdf');
+            echo $data;
+        } else {
+            return back()->withErrors(
+                'Error',__('Failed to retrieve Carian Persendirian from eTanah using this transaction ID')
+            );
+        }
     }
 
     public function carian($user_id)
