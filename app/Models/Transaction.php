@@ -14,20 +14,9 @@ class Transaction extends Model
 
     public $table = 'transaction_details';
 
-    /**
-     * Scope a query to only include MelakaPay transaction.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeApp($query)
     {
-        return $query->where('agency','LIKE','%-app');
-    }
-
-    public function scopeEbayar($query)
-    {
-        return $query->where('agency','NOT LIKE','%-app');
+        return $query->where('agency','LIKE','%-app%');
     }
 
     public function scopeToday($query)
@@ -40,6 +29,11 @@ class Transaction extends Model
     public function agency()
     {
         return $this->belongsTo(Agency::class, 'agency_id');
+    }
+
+    public function ebayar()
+    {
+        return $this->belongsTo(AgencyEbayar::class, 'agency', 'agency');
     }
 
     public function user()

@@ -37,6 +37,7 @@ Route::group([
     $router->resource('email-logs', EmailLogController::class);
     $router->resource('ebayar', EbayarController::class);
     $router->resource('update-transactions', UpdateTransactionController::class);
+    $router->resource('ebayar-transactions', EbayarTransactionController::class);
 
     $router->get('/api/service','SchedulerController@service');
 

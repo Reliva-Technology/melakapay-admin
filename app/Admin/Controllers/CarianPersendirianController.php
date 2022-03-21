@@ -28,7 +28,7 @@ class CarianPersendirianController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new CarianPersendirian());
-        $grid->model()->orderBy('id', 'desc');
+        $grid->model()->orderBy('id_portal_transaksi', 'desc');
 
         $grid->column('id', __('ID'));
         $grid->column('bil_paparan', __('Bil. Paparan'));
@@ -47,6 +47,7 @@ class CarianPersendirianController extends AdminController
             $filter->like('id_hakmilik', __('ID Hakmilik'));
             $filter->like('id_portal_transaksi', __('ID Portal'));
             $filter->like('user_id', __('User ID'));
+            $filter->like('tarikh', __('Tarikh'));
         
         });
 
