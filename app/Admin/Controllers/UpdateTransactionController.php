@@ -27,7 +27,14 @@ class UpdateTransactionController extends AdminController
             $filter->disableIdFilter();
         
             // Add a column filter
-            $filter->like('payment_type', __('Payment Type'));
+            $filter->equal('payment_type', 'Payment Type')->radio(
+                [
+                    '' => 'All',
+                    'Cukai Tanah' => 'Cukai Tanah',
+                    'Cukai Petak' => 'Cukai Petak',
+                    'Carian Persendirian' => 'Carian Persendirian'
+                ]
+            );
             $filter->between('updated_at', 'Date')->date();
         });
 
