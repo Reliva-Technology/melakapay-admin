@@ -29,7 +29,6 @@ class UpdateTransactionController extends AdminController
             // Add a column filter
             $filter->equal('payment_type', 'Payment Type')->radio(
                 [
-                    '' => 'All',
                     'Cukai Tanah' => 'Cukai Tanah',
                     'Cukai Petak' => 'Cukai Petak',
                     'Carian Persendirian' => 'Carian Persendirian'

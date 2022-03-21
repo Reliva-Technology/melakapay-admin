@@ -10,18 +10,8 @@ use Encore\Admin\Show;
 
 class VisitorController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'Visitor';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
         $grid = new Grid(new Visitor());
@@ -32,6 +22,20 @@ class VisitorController extends AdminController
         $grid->column('date', __('Date'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+
+        $grid->filter(function($filter){
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->like('date', 'Date')->date();
+        });
+
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableEdit();
+            $actions->disableView();
+        });
+
+        $grid->disableCreateButton()->disableColumnSelector();
 
         return $grid;
     }

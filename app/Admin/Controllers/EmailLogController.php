@@ -50,8 +50,8 @@ class EmailLogController extends AdminController
         $show->field('to', __('To'));
         $show->field('subject', __('Subject'));
         $show->field('body', __('Body'))->unescape();
-        $show->field('headers', __('Headers'));
-        $show->field('attachments', __('Attachments'));
+        $show->field('headers', __('Headers'))->json();
+        $show->field('attachments', __('Attachments'))->json();
 
         $show->panel()->tools(function ($tools) {
             $tools->disableEdit();
