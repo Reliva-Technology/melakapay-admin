@@ -25,6 +25,11 @@ class Transaction extends Model
         return $query->where('agency','LIKE','%-app');
     }
 
+    public function scopeEbayar($query)
+    {
+        return $query->where('agency','NOT LIKE','%-app');
+    }
+
     public function scopeToday($query)
     {
         $start = Carbon::now()->startOfDay();

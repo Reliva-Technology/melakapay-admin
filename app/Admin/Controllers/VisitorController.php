@@ -17,14 +17,11 @@ class VisitorController extends AdminController
         $grid = new Grid(new Visitor());
         $grid->model()->orderBy('id', 'desc');
 
-        $grid->column('id', __('Id'));
-        $grid->column('ip', __('Ip'));
+        $grid->column('id', __('ID'));
+        $grid->column('ip', __('IP Address'));
         $grid->column('date', __('Date'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
 
         $grid->filter(function($filter){
-            // Remove the default id filter
             $filter->disableIdFilter();
             $filter->like('date', 'Date')->date();
         });
@@ -40,37 +37,16 @@ class VisitorController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
         $show = new Show(Visitor::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('ip', __('Ip'));
+        $show->field('id', __('ID'));
+        $show->field('ip', __('IP Address'));
         $show->field('date', __('Date'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
         return $show;
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new Visitor());
-
-        $form->ip('ip', __('Ip'));
-        $form->date('date', __('Date'))->default(date('Y-m-d'));
-
-        return $form;
     }
 }
