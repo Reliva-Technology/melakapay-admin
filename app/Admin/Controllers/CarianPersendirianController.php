@@ -47,9 +47,9 @@ class CarianPersendirianController extends AdminController
 
         $grid->disableCreateButton();
 
-        /* $grid->tools(function (Grid\Tools $tools) {
+        $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new SearchCarianPersendirian());
-        }); */
+        });
 
         return $grid;
     }
@@ -92,32 +92,7 @@ class CarianPersendirianController extends AdminController
             header('Content-disposition: attachment;filename='.$id.'.pdf');
             echo $data;
         } else {
-            return back()->withErrors(
-                'Error',__('Failed to retrieve Carian Persendirian from eTanah using this transaction ID')
-            );
-        }
-    }
-
-    public function carian($user_id)
-    {
-        // load from etanah
-        $url = 'http://etanah.melaka.gov.my/etanahwsa/CarianPersendirianService?wsdl';
-        $soap = Soap::baseWsdl($url)->senaraiDokumen(['idPengguna' => $user_id]);                
-        $result = json_decode($soap->body(),true);
-
-        if(isset($result['return'])){
-            foreach ($result['return'] as $value) {
-                CarianPersendirian::updateOrCreate([
-                    "id_portal_transaksi" => $value['idPortalTransaksi'],
-                    "id_hakmilik" => $value['idHakmilik'],
-                    "bil_paparan" => $value['bilPaparan'],
-                    "tarikh" => $value['tarikh'],
-                    "user_id" => $user_id
-                ]);
-            };
-
-        } else {
-            return back()->withErrors('Error', 'No such transaction records exist in eTanah for this user.');
+            return 'Failed to retrieve Carian Persendirian from eTanah using this transaction ID';
         }
     }
 }
