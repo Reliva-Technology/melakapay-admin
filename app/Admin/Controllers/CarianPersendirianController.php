@@ -65,7 +65,7 @@ class CarianPersendirianController extends AdminController
         $show->field('tarikh', __('Tarikh'));
         $show->field('user_id', __('User ID'));
         $show->id_portal_transaksi(__('Action'))->unescape()->as(function ($id_portal_transaksi) {
-            return '<a href="'.url('/admin/carian-persendirian/print-carian-persendirian').'/'.$id_portal_transaksi.'" class="btn btn-sm btn-success" title="Print Carian Persendirian">Print Carian Persendirian</a>';
+            return '<a href="'.url('/admin/carian-persendirian/print-carian-persendirian').'/'.$id_portal_transaksi.'" class="btn btn-sm btn-success" title="Print Carian Persendirian" target="_blank">Print Carian Persendirian</a>';
         });
 
         $show->panel()
