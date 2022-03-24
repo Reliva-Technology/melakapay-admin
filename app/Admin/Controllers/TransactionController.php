@@ -120,20 +120,18 @@ class TransactionController extends AdminController
 
         if($receipt){
 
-            $test = \File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$id.'.pdf');
+            if(\File::exists(env('MELAKAPAY_STORAGE').$id.'.pdf')){
 
-            if(\File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$id.'.pdf')){
-
-                $show->id(__('Action'))->unescape()->as(function ($data) {
-                    return '<a href="'.env('MELAKAPAY_URL').'storage/rasmi-'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Receipt" target="_blank">View Receipt</a>';
+                $show->id(__('Proof of Payment'))->unescape()->as(function ($proof) {
+                    return '<a href="'.env('MELAKAPAY_URL').'storage/'.$proof.'.pdf" class="btn btn-sm btn-primary" title="View Proof of Payment" target="_blank">View Proof of Payment</a>';
                 });
 
             }
 
-            if(\File::exists(env('MELAKAPAY_STORAGE').$id.'.pdf')){
+            if(\File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$id.'.pdf')){
 
-                $show->id(__('Action'))->unescape()->as(function ($data) {
-                    return '<a href="'.env('MELAKAPAY_URL').'storage/'.$data.'.pdf" class="btn btn-sm btn-primary" title="View Proof of Payment" target="_blank">View Proof of Payment</a>';
+                $show->id(__('Receipt'))->unescape()->as(function ($resit) {
+                    return '<a href="'.env('MELAKAPAY_URL').'storage/rasmi-'.$resit.'.pdf" class="btn btn-sm btn-success" title="View Receipt" target="_blank">View Receipt</a>';
                 });
 
             }
