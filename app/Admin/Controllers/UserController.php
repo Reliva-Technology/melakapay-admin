@@ -15,6 +15,7 @@ use Carbon\Carbon as Carbon;
 use Encore\Admin\Widgets\Box;
 use DB;
 use App\Admin\Actions\Transaction\GetTransactionFromEpic;
+use Illuminate\Support\Str;
 
 class UserController extends AdminController
 {
@@ -179,11 +180,13 @@ class UserController extends AdminController
 
             $form->text('id', __('User ID'))->attribute('readonly');
             $form->text('name', __('Name'));
-            $form->email('email', __('Email'))->updateRules(['required', "email:rfc,dns"]);
-            $form->text('username', __('IC'))->creationRules(['required', "unique:users"])
+            $form->email('email', __('Email'))
+                ->updateRules(['required', "email:rfc,dns"]);
+            $form->text('username', __('IC'))
+                ->creationRules(['required', "unique:users"])
                 ->updateRules(['required', "unique:users,username,{{id}}"]);
             $form->text('remember_token', __('Remember token'))->attribute('readonly');
-            $form->text('api_token', __('Api token'))->attribute('readonly');
+            $form->text('api_token', __('API token'))->default(Str::random(60));
             $form->text('device_token', __('Device token'))->attribute('readonly');
             $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
 
@@ -246,6 +249,13 @@ class UserController extends AdminController
             $form->text('profile.full_name')->value($form->name);
             $form->text('profile.id_type')->value('MyKad');
         });
+
+        /* if(empty($form->api_token)){
+
+            $form->saving(function (Form $form) {
+                $form->api_token = Str::random(60);
+            });
+        } */
 
         return $form;
     }
