@@ -51,7 +51,10 @@ class EmailLogController extends AdminController
         $show->field('subject', __('Subject'));
         $show->field('body', __('Body'))->unescape();
         $show->field('headers', __('Headers'))->json();
-        $show->field('attachments', __('Attachments'))->json();
+        
+        $show->id(__('Attachment'))->unescape()->as(function ($download) {
+            return '<a href="'.url('/admin/email-logs/download-attachment').'/'.$download.'" class="btn btn-sm btn-success" title="Download Attachment" target="_blank">Download Attachment</a>';
+        });
 
         $show->panel()->tools(function ($tools) {
             $tools->disableEdit();
@@ -61,20 +64,31 @@ class EmailLogController extends AdminController
         return $show;
     }
 
-    protected function form()
+    public function print($id)
     {
-        $form = new Form(new EmailLog());
+        $result = EmailLog::find($id);
 
-        $form->datetime('date', __('Date'))->default(date('Y-m-d H:i:s'));
-        $form->text('from', __('From'));
-        $form->text('to', __('To'));
-        $form->text('cc', __('Cc'));
-        $form->text('bcc', __('Bcc'));
-        $form->text('subject', __('Subject'));
-        $form->textarea('body', __('Body'));
-        $form->textarea('headers', __('Headers'));
-        $form->textarea('attachments', __('Attachments'));
+        $attachments = explode("\n\n", $result['attachments']);
 
-        return $form;
+        foreach ($attachments as $i => $attachment) {
+
+            $data = explode("\r\n\r\n", $attachment);
+            $headersData = str_replace(";\r\n", ';', $data[0]);
+            $headersData = explode("\r\n", $headersData);
+
+            $headers = [];
+            foreach ($headersData as $item) {
+                $header = explode(':', $item);
+                $headers[$header[0]] = $header[1];
+            }
+
+            $content = $data[1];
+
+            $data = \Response::make(base64_decode($content, true), 200, $headers);
+        }
+
+        header('Content-Type: application/pdf');
+        header('Content-disposition: attachment;filename='.$id.'.pdf');
+        echo $data;
     }
 }

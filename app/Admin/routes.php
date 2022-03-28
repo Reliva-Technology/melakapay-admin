@@ -35,6 +35,7 @@ Route::group([
     $router->resource('log-sms', SmsLogController::class);
     $router->resource('visitors', VisitorController::class);
     $router->resource('email-logs', EmailLogController::class);
+    $router->get('/email-logs/download-attachment/{id}','EmailLogController@print');
     $router->resource('ebayar', EbayarController::class);
     $router->resource('update-transactions', UpdateTransactionController::class);
     $router->resource('ebayar-transactions', EbayarTransactionController::class);
