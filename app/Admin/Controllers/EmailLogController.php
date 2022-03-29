@@ -50,11 +50,6 @@ class EmailLogController extends AdminController
         $show->field('to', __('To'));
         $show->field('subject', __('Subject'));
         $show->field('body', __('Body'))->unescape();
-        $show->field('headers', __('Headers'))->json();
-        
-        $show->id(__('Attachment'))->unescape()->as(function ($download) {
-            return '<a href="'.url('/admin/email-logs/download-attachment').'/'.$download.'" class="btn btn-sm btn-success" title="Download Attachment" target="_blank">Download Attachment</a>';
-        });
 
         $show->panel()->tools(function ($tools) {
             $tools->disableEdit();
