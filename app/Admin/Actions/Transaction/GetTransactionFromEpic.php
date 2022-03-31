@@ -8,10 +8,11 @@ use DB;
 use Carbon\Carbon as Carbon;
 use App\Models\User;
 use App\Models\Profile;
+use Illuminate\Support\Facades\Http;
 
 class GetTransactionFromEpic extends RowAction
 {
-    public $name = 'Get Transaction from EPIC';
+    public $name = 'Check Status';
 
     public function handle(Model $model)
     {
@@ -52,14 +53,32 @@ class GetTransactionFromEpic extends RowAction
             # generate receipt
             if($epic->receipt_no != NULL)
             {
-                return $this->response()->success('Successfully get transaction details from EPIC.');
-                
-            } else {
-                return $this->response()->warning('Cannot retrieve transaction records from EPIC.');
-            }
+                $url = env('EPAYMENT_REQUERY_URL').$epic->id;
+                $response = Http::get($url);
 
+                if($response){
+
+                    if($response['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
+
+                    # post data to response page
+                    $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', [
+                        $response
+                    ]);
+                    $update->throw();
+
+                    if($update == 'Successful'){
+                        $this->response()->success('Successfully update transaction ID '.$response['TRANS_ID'])->refresh();
+                    } else {
+                        $this->response()->warning('No update required for transaction ID '.$response['TRANS_ID'])->refresh();
+                    }
+                } else {
+                    return $this->response()->warning('No response from EPIC.')->refresh();
+                }
+            } else {
+                return $this->response()->warning('Cannot retrieve transaction records from EPIC')->refresh();
+            }
         } else {
-            return $this->response()->warning('No such transaction records exist in EPIC.');
+            return $this->response()->warning('No such transaction records exist in EPIC.')->refresh();
         }
     }
 }
