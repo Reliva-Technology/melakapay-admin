@@ -60,6 +60,7 @@ class GetTransactionFromEpic extends RowAction
                 if($response){
 
                     $data = $response->body();
+                    return $data;
 
                     if($data['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
 
