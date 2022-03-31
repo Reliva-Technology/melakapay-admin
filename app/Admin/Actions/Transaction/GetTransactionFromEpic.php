@@ -59,7 +59,7 @@ class GetTransactionFromEpic extends RowAction
 
                 if($response){
 
-                    $data = $response->body();
+                    $data = json_decode($response->body(),true);
 
                     if($data['STATUS'] == '1'){
 
