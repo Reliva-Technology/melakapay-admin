@@ -44,7 +44,7 @@ class GetTransactionFromEpic extends RowAction
                     if($data['STATUS'] == '1'){
 
                         # post data to response page
-                        $update = Http::withBody($data)->post(env('MELAKAPAY_URL').'payment/fpx/response');
+                        $update = Http::withBody($data, 'multipart/form-data')->post(env('MELAKAPAY_URL').'payment/fpx/response');
 
                         return $this->response()->warning($update->body());
 
