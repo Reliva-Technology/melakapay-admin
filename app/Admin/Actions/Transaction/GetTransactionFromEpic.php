@@ -59,13 +59,11 @@ class GetTransactionFromEpic extends RowAction
 
                 if($response){
 
-                    return $response->getBody();
-
                     if($response['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
 
                     # post data to response page
                     $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', [
-                        $response
+                        $response->body()
                     ]);
                     $update->throw();
 
