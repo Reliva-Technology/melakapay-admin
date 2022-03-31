@@ -59,18 +59,20 @@ class GetTransactionFromEpic extends RowAction
 
                 if($response){
 
-                    if($response['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
+                    $data = $response->body();
+
+                    if($data['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
 
                     # post data to response page
                     $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', [
-                        $response->body()
+                        $data
                     ]);
                     $update->throw();
 
                     if($update == 'Successful'){
-                        $this->response()->success('Successfully update transaction ID '.$response['TRANS_ID'])->refresh();
+                        $this->response()->success('Successfully update transaction ID '.$data['TRANS_ID'])->refresh();
                     } else {
-                        $this->response()->warning('No update required for transaction ID '.$response['TRANS_ID'])->refresh();
+                        $this->response()->warning('No update required for transaction ID '.$data['TRANS_ID'])->refresh();
                     }
                 } else {
                     return $this->response()->warning('No response from EPIC.')->refresh();
