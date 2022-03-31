@@ -47,9 +47,10 @@ class GetTransactionFromEpic extends RowAction
                         $update = Http::post(env('MELAKAPAY_URL').'payment/fpx/response', [
                             $response->body()
                         ]);
-                        return $this->response()->success($update->throw());
 
-                        if($update == 'Successful'){
+                        return $update->body();
+
+                        if($update->body() == 'Successful'){
                             return $this->response()->success('Successfully update transaction ID '.$data['TRANS_ID'])->refresh();
                         } else {
                             return $this->response()->warning('No update required for transaction ID '.$data['TRANS_ID']);
