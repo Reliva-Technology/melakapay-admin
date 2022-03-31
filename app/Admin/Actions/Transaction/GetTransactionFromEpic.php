@@ -55,9 +55,11 @@ class GetTransactionFromEpic extends RowAction
             {
                 $url = env('EPAYMENT_REQUERY_URL').$epic->id;
                 $response = Http::get($url);
-                dd($response);
+                $response->throw();
 
                 if($response){
+
+                    return $response->getBody();
 
                     if($response['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
 
