@@ -60,7 +60,6 @@ class GetTransactionFromEpic extends RowAction
                 if($response){
 
                     $data = $response->body();
-                    return $this->response()->success($data);
 
                     if($data['STATUS'] == '1'){
 
