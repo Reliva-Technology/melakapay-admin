@@ -28,10 +28,16 @@ class TransactionController extends AdminController
             ->orderBy('id', 'desc')
             ->take(1000);
         
-        $grid->column('id', __('ID'));
+        $grid->column('id')->display(function ($title) {
+            if(\File::exists(env('MELAKAPAY_STORAGE').'rasmi-'.$title.'.pdf')){
+                return "<span class='label label-success'>$title</span>";
+            } else {
+                return "<span class='label label-danger'>$title</span>";
+            }
+        
+        });
         $grid->column('modified', __('Payment Date/Time'))->filter('range', 'date');
         $grid->column('agency.agency_name', __('Agency'));
-        $grid->column('epx_trns_no', __('EPS Transaction ID'));
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
@@ -42,7 +48,6 @@ class TransactionController extends AdminController
         $grid->filter(function($filter){
         
             // Add a column filter
-            $filter->equal('epx_trns_no', 'EPS Transaction ID');
             $filter->equal('receipt_no', 'Receipt No');
             $filter->equal('status', 'Status')->radio(
                 [
@@ -71,6 +76,11 @@ class TransactionController extends AdminController
 
         $grid->disableCreateButton();
 
+        $grid->footer(function ($query) {
+        
+            return "<span class='label label-success'>xxx</span> Receipt generated<br><span class='label label-danger'>xxx</span> No receipt found. Use Check Status action to retrieve latest transaction details";
+        });
+
         return $grid;
     }
 
@@ -97,12 +107,12 @@ class TransactionController extends AdminController
         });
 
         $show->field('id', __('ID'));
-        $show->field('agency_id', __('Agency ID'));
+        $show->field('agency.agency_name', __('Agency'));
         $show->field('account_id', __('Account ID'));
         $show->amount()->as(function ($amount) {
             return number_format($amount,2);
         });
-        $show->field('payment_type', __('Payment mode'))->using([
+        $show->field('payment_type', __('Payment Mode'))->using([
             'fpx' => 'FPX Individual',
             'fpx1' => 'FPX Corporate'
         ]);
@@ -169,32 +179,5 @@ class TransactionController extends AdminController
             });
 
         return $show;
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new Transaction());
-
-        $form->disableEditingCheck();
-        $form->disableCreatingCheck();
-        $form->disableViewCheck();
-
-        $form->text('epx_trns_no', __('EPS Transaction ID'));
-        $form->text('receipt_no', __('Receipt No'));
-        
-        $form->number('user_id', __('User ID'));
-                
-        $form->text('status', __('Status'));
-        $form->text('account_id', __('Account No'));
-        $form->datetime('date_payment', __('Payment Date'));
-        $form->text('payment_type', __('Payment Type'));
-        $form->text('amount', __('Amount'));
-
-        return $form;
     }
 }
