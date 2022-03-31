@@ -60,7 +60,7 @@ class GetTransactionFromEpic extends RowAction
                 if($response){
 
                     $data = $response->body();
-                    return $data;
+                    return $this->response()->success($data);
 
                     if($data['status'] != '202') return $this->response()->warning('No such transaction records exist in EPIC.');
 
@@ -71,9 +71,9 @@ class GetTransactionFromEpic extends RowAction
                     $update->throw();
 
                     if($update == 'Successful'){
-                        $this->response()->success('Successfully update transaction ID '.$data['TRANS_ID'])->refresh();
+                        return $this->response()->success('Successfully update transaction ID '.$data['TRANS_ID'])->refresh();
                     } else {
-                        $this->response()->warning('No update required for transaction ID '.$data['TRANS_ID'])->refresh();
+                        return $this->response()->warning('No update required for transaction ID '.$data['TRANS_ID'])->refresh();
                     }
                 } else {
                     return $this->response()->warning('No response from EPIC.')->refresh();
