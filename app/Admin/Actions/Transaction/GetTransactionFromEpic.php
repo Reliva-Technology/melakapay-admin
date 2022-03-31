@@ -55,6 +55,7 @@ class GetTransactionFromEpic extends RowAction
             {
                 $url = env('EPAYMENT_REQUERY_URL').$epic->id;
                 $response = Http::get($url);
+                dd($response);
 
                 if($response){
 
