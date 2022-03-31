@@ -30,26 +30,6 @@ class GetTransactionFromEpic extends RowAction
                     'modified' => Carbon::now()
                 ]);
 
-            $transaction = \DB::table('transaction_details')->find($model['id']);
-
-            # clone user if required
-            $user = User::find($transaction->user_id);
-            $ebayar_user_details = Profile::where('id_no', $user->username)->first();
-
-            if(!$ebayar_user_details){
-
-                $ebayar_details = [
-                    'user_id' => $user->id,
-                    'full_name' => $user->name,
-                    'id_type' => 'MyKad Number',
-                    'id_no' => $user->username,
-                    'email' => $user->email,
-                    'modified' => now()
-                ];
-    
-                DB::table('user_details')->insert($ebayar_details);
-            }
-
             # generate receipt
             if($epic->receipt_no != NULL)
             {
