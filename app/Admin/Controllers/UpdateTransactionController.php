@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Carbon\Carbon as Carbon;
 
 class UpdateTransactionController extends AdminController
 {
@@ -20,7 +21,12 @@ class UpdateTransactionController extends AdminController
         $grid->column('id', __('ID'));
         $grid->column('payment_type', __('Payment Type'));
         $grid->column('receipt_no', __('Receipt No.'));
-        $grid->column('created_at', __('Created at'));
+        $grid->created_at()->display(function ($created) {
+            return Carbon::parse($created)->toDateTimeString();
+        });
+        $grid->updated_at()->display(function ($updated) {
+            return Carbon::parse($updated)->toDateTimeString();
+        });
 
         $grid->filter(function($filter){
             // Remove the default id filter
@@ -34,6 +40,7 @@ class UpdateTransactionController extends AdminController
                     'Carian Persendirian' => 'Carian Persendirian'
                 ]
             );
+            $filter->equal('receipt_no', 'Receipt No.');
             $filter->between('updated_at', 'Date')->date();
         });
 

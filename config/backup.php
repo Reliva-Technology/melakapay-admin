@@ -8,7 +8,7 @@ return [
          * The name of this application. You can use this name to monitor
          * the backups.
          */
-        'name' => env('APP_NAME', 'Melakapay Admin'),
+        'name' => env('APP_NAME', 'Melakapay'),
 
         'source' => [
 
@@ -199,7 +199,7 @@ return [
      */
     'monitorBackups' => [
         [
-            'name' => env('APP_NAME', 'MelakaPay Admin'),
+            'name' => env('APP_NAME', 'MelakaPay'),
             'disks' => ['local'],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
