@@ -19,7 +19,7 @@ class GetTransactionFromZakat extends RowAction
         $receipt = \DB::table('receipts')->where('merchant_transaction_id', $model->id)->first();
 
         # generate receipt
-        if($receipt['receipt_no'] != NULL){
+        if(!$receipt){
             $url = 'https://api.izakat.com/epay/eps/get_transaction/F'.$model->id;
             $response = Http::get($url);
             $response->throw();
