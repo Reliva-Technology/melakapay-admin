@@ -16,11 +16,11 @@ class GetTransactionFromZakat extends RowAction
 
     public function handle(Model $model)
     {
-        $receipt = \DB::table('receipts')->where('merchant_transaction_id', $model['id'])->first();
+        $receipt = \DB::table('receipts')->where('merchant_transaction_id', $model->id)->first();
 
         # generate receipt
         if($receipt['receipt_no'] != NULL){
-            $url = 'https://api.izakat.com/epay/eps/get_transaction/F'.$model['id'];
+            $url = 'https://api.izakat.com/epay/eps/get_transaction/F'.$model->id;
             $response = Http::get($url);
             $response->throw();
 
