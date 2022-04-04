@@ -72,6 +72,7 @@ class TransactionController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableEdit()->disableDelete();
             $actions->add(new GetTransactionFromEpic);
+            $actions->add(new GetTransactionFromZakat);
         });
 
         $grid->disableCreateButton();
