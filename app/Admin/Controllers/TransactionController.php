@@ -13,6 +13,7 @@ use DB;
 use Carbon\Carbon;
 use App\Admin\Actions\Transaction\GetTransactionFromEpic;
 use App\Admin\Actions\Transaction\GetTransactionFromZakat;
+use App\Admin\Actions\Transaction\RegenerateRecipt;
 use Illuminate\Support\Facades\Http;
 Use Encore\Admin\Admin;
 
@@ -73,6 +74,7 @@ class TransactionController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableEdit()->disableDelete();
             $actions->add(new GetTransactionFromEpic);
+            $actions->add(new RegenerateRecipt);
             $actions->add(new GetTransactionFromZakat);
         });
 
