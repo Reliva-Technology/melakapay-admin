@@ -191,10 +191,10 @@ class UserController extends AdminController
             $form->text('profile.phone_no', __('Phone No.'))->updateRules(['required']);
 
             $form->divider('Personal Information');
-            $form->text('profile.address','Address Line 1');
+            $form->text('profile.address','Address Line 1')->updateRules(['required']);
             $form->text('profile.address2','Address Line 2');
-            $form->text('profile.city','City');
-            $form->number('profile.postcode','Postcode');
+            $form->text('profile.city','City')->updateRules(['required']);
+            $form->number('profile.postcode','Postcode')->updateRules(['required']);
             $form->select('profile.state','State')->options([
                 'Pahang' => 'Pahang',
                 'Melaka' => 'Melaka',
@@ -213,7 +213,7 @@ class UserController extends AdminController
                 'Sabah' => 'Sabah',
                 'Sarawak' => 'Sarawak',
                 'Labuan' => 'Labuan'
-            ]);
+            ])->updateRules(['required']);
         });
 
         $form->column(1/2, function ($form) {
