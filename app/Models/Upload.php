@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Upload extends Model
 {
     use HasFactory;
+    public $timestamps = true;
 
     public function agency()
     {

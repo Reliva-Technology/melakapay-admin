@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
 {
-
     public $table = 'feedback';
+
+    public $timestamps = true;
     
     public $fillable = [
         'agency_id',

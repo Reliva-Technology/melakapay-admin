@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class UpdateTransaction extends Model
 {
     use HasFactory;
+    public $timestamps = true;
 }
