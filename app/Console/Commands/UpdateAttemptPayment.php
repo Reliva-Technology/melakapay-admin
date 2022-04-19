@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Models\UpdatePayment;
+use Illuminate\Support\Facades\Http;
 use DB;
 use Log;
 use Exception;
