@@ -42,39 +42,43 @@ class UpdateAttemptPayment extends Command
                 # check if attempt already logged
                 $logged = UpdatePayment::all();
 
-                if($logged['eps_id'] == $epic->id){
+                if($logged){
+                    if($logged['eps_id'] != $epic->id){
 
-                    # generate receipt
-                    $url = env('EPAYMENT_REQUERY_URL').$epic->id;
-                    
-                    $response = Http::get($url);
-                    $response->throw();
+                        # generate receipt
+                        $url = env('EPAYMENT_REQUERY_URL').$epic->id;
+                        
+                        $response = Http::get($url);
+                        $response->throw();
 
-                    if($response){
+                        if($response){
 
-                        $data = json_decode($response->body(),true);
+                            $data = json_decode($response->body(),true);
 
-                        if($data['STATUS'] == '1'){
+                            if($data['STATUS'] == '1'){
 
-                            # post data to response page
-                            $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
+                                # post data to response page
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
 
-                            # log attempt in DB
-                            UpdatePayment::updateOrCreate([
-                                "eps_id" => $epic->id,
-                                "transaction_id" => $epic->merchant_trans_id,
-                                "eps_status" => $epic->eps_status,
-                                "response" => $update->body()
-                            ]);
+                                # log attempt in DB
+                                UpdatePayment::updateOrCreate([
+                                    "eps_id" => $epic->id,
+                                    "transaction_id" => $epic->merchant_trans_id,
+                                    "eps_status" => $epic->eps_status,
+                                    "response" => $update->body()
+                                ]);
 
-                            sleep(30);
-                            
+                                sleep(30);
+                                
+                            } else {
+                                Log::info('Error retrieving this data from EPIC.');
+                            }
                         } else {
-                            Log::info('Error retrieving this data from EPIC.');
+                            Log::info('No response from EPIC.');
                         }
-                    } else {
-                        Log::info('No response from EPIC.');
                     }
+                } else {
+                    Log::info('No attempt payment transaction require update');
                 }
             }
         } else {
