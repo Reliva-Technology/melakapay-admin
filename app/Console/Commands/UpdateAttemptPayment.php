@@ -30,6 +30,7 @@ class UpdateAttemptPayment extends Command
             ->where('eps_status', 0) // attempt
             ->where('update_status', 0) // belum update
             ->whereNotNull('receipt_no') // takde resit
+            ->take(10)
             ->get();
             
         } catch (Exception $e) {
@@ -75,7 +76,7 @@ class UpdateAttemptPayment extends Command
                             sleep(30);
                             
                         } else {
-                            Log::info('Error retrieving this data from EPIC.');
+                            Log::info('Error retrieving this data from EPIC for EPS ID:'.$epic->id);
                         }
                     } else {
                         Log::info('No response from EPIC.');
