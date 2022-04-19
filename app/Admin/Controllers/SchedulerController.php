@@ -14,18 +14,8 @@ use DB;
 
 class SchedulerController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'Scheduler';
 
-    /**
-     * Make a grid builder.
-     *
-     * @return Grid
-     */
     protected function grid()
     {
         $grid = new Grid(new Scheduler());
@@ -41,12 +31,6 @@ class SchedulerController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
     protected function detail($id)
     {
         $show = new Show(Scheduler::findOrFail($id));
@@ -64,11 +48,6 @@ class SchedulerController extends AdminController
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
     protected function form()
     {
         $form = new Form(new Scheduler());
