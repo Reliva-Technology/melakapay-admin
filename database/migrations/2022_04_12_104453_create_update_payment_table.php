@@ -15,9 +15,9 @@ class CreateUpdatePaymentTable extends Migration
     {
         Schema::create('update_payments', function (Blueprint $table) {
             $table->id();
-            $table->int('eps_id');
-            $table->int('transaction_id');
-            $table->int('eps_status');
+            $table->integer('eps_id');
+            $table->integer('transaction_id');
+            $table->integer('eps_status');
             $table->text('response');
             $table->timestamps();
         });
