@@ -54,7 +54,7 @@ class RegenerateRecipt extends RowAction
                             'as' => 'MelakaPay-Receipt-'.$model->id.'.pdf',
                             'mime' => 'text/pdf',
                         ])
-                        ->markdown('emails.new-receipt');
+                        ->markdown('email.new-receipt');
                     }
 
                     return $this->response()->success($update->body())->refresh();
