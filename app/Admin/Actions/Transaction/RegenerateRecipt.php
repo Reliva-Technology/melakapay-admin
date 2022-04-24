@@ -46,16 +46,14 @@ class RegenerateRecipt extends RowAction
                     # post data to response page
                     $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
 
-                    if($update->body() == 'Successful'){
-                        # send new receipt to user
-                        $mail = new MailMessage;
-                        $mail->subject(__('MelakaPay Transaction Receipt'))
+                    # send new receipt to user
+                    $mail = new MailMessage;
+                    $mail->subject(__('MelakaPay Transaction Receipt'))
                         ->attach(storage_path('app/public/').'rasmi-'.$model->id.'.pdf', [
                             'as' => 'MelakaPay-Receipt-'.$model->id.'.pdf',
                             'mime' => 'text/pdf',
                         ])
                         ->markdown('email.new-receipt');
-                    }
 
                     return $this->response()->success($update->body())->refresh();
                     
