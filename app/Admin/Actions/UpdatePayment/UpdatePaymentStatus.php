@@ -79,7 +79,7 @@ class UpdatePaymentStatus extends Action
 
     public function form()
     {
-        $this->date('user_id', 'Date');
+        $this->date('date', 'Date');
         $this->select('status', __('Status'))->options(['0' => 'Attempt Payment', '1' => 'Successful', '2' => 'Failed', '3' => 'Pending']);
     }
 
