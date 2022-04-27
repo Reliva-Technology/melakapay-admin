@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Carbon\Carbon;
 use App\Models\UpdatePayment;
 use Illuminate\Support\Facades\Http;
 use DB;
@@ -29,7 +28,6 @@ class UpdateAttemptPayment extends Command
             ->where('merchant_trans_id', '>', 496072) // only melakapay transaction
             ->where('eps_status', 0) // attempt
             ->where('update_status', 0) // belum update
-            ->whereNotNull('receipt_no') // takde resit
             ->take(10)
             ->get();
             
