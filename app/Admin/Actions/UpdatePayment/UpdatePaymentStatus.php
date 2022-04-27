@@ -30,45 +30,29 @@ class UpdatePaymentStatus extends Action
             
             foreach($data as $epic){
 
-                # check if attempt already logged
-                $logged = UpdatePayment::where('eps_id', $epic->id)->first();
+                # generate receipt
+                $url = env('EPAYMENT_REQUERY_URL').$epic->id;
+                
+                $response = Http::get($url);
+                $response->throw();
 
-                if($logged){
-                    return $this->response()->info('No attempt payment transaction require update for EPS ID:'.$epic->id);
-                } else {
+                if($response){
 
-                    # generate receipt
-                    $url = env('EPAYMENT_REQUERY_URL').$epic->id;
-                    
-                    $response = Http::get($url);
-                    $response->throw();
+                    $result = json_decode($response->body(),true);
 
-                    if($response){
+                    if($result['STATUS'] == '1'){
 
-                        $result = json_decode($response->body(),true);
+                        # post data to response page
+                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
 
-                        if($result['STATUS'] == '1'){
-
-                            # post data to response page
-                            $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
-
-                            # log attempt in DB
-                            UpdatePayment::updateOrCreate([
-                                "eps_id" => $epic->id,
-                                "transaction_id" => $epic->merchant_trans_id,
-                                "eps_status" => $epic->eps_status,
-                                "response" => $update->body()
-                            ]);
-
-                            return $this->response()->success('Save or create log update for EPS ID:'.$epic->id);
-
-                            sleep(30);
-                            
-                        } else {
-                            return $this->response()->error('Error retrieving this data from EPIC for EPS ID:'.$epic->id);
-                        }
-                    } else {
-                        return $this->response()->error('No response from EPIC.');
+                        # log attempt in DB
+                        UpdatePayment::updateOrCreate([
+                            "eps_id" => $epic->id,
+                            "transaction_id" => $epic->merchant_trans_id,
+                            "eps_status" => $epic->eps_status,
+                            "response" => $update->body()
+                        ]);
+                        
                     }
                 }
             }
