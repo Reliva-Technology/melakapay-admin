@@ -50,7 +50,7 @@ class UserController extends AdminController
             $actions->add(new ResetPassword);
             $actions->add(new SetUsernameAsPassword);
             $actions->add(new ImpersonateUser);
-            $actions->disableDelete();
+            //$actions->disableDelete();
         });
 
         $grid->disableCreateButton();
