@@ -20,7 +20,6 @@ class UpdatePaymentStatus extends Action
         $payment_type = $request->get('payment_type');
 
         $data = \DB::connection('epic')->table('eps_transactions')
-        ->where('merchant_trans_id', '>', 496072) // only melakapay transaction
         ->where('eps_status', $status)
         ->whereDate('payment_datetime', $date)
         ->take(10)
