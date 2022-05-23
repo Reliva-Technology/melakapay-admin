@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use DB;
 use Log;
 use Exception;
+use Carbon\Carbon;
 
 class UpdateAttemptPayment extends Command
 {
@@ -25,10 +26,11 @@ class UpdateAttemptPayment extends Command
         try {
             $data = DB::connection('epic')
             ->table('eps_transactions')
-            ->where('merchant_trans_id', '>', 496072) // only melakapay transaction
             ->where('eps_status', 0) // attempt
             ->where('update_status', 0) // belum update
-            ->take(10)
+            ->whereBetween('payment_datetime', 
+                [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]
+            )
             ->get();
             
         } catch (Exception $e) {
