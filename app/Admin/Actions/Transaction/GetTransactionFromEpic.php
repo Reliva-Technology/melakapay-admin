@@ -8,6 +8,7 @@ use DB;
 use Carbon\Carbon as Carbon;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\UpdatePayment;
 use Illuminate\Support\Facades\Http;
 
 class GetTransactionFromEpic extends RowAction
@@ -45,6 +46,15 @@ class GetTransactionFromEpic extends RowAction
 
                         # post data to response page
                         $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
+
+                        # log attempt in DB
+                        UpdatePayment::updateOrCreate([
+                            "eps_id" => $epic->id,
+                            "transaction_id" => $epic->merchant_trans_id,
+                            "eps_status" => $epic->eps_status,
+                            "response" => $update->body()
+                        ]);
+                        
                         return $this->response()->success($update->body())->refresh();
                         
                     } else {
