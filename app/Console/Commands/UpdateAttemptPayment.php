@@ -76,7 +76,7 @@ class UpdateAttemptPayment extends Command
                             sleep(30);
                             
                         } else {
-                            Log::info('Error retrieving this data from EPIC for EPS ID:'.$epic->id);
+                            Log::info('Status '.$epic->eps_status.' for EPS ID:'.$epic->id);
                         }
                     } else {
                         Log::info('No response from EPIC.');
