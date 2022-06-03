@@ -10,6 +10,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\MaintenanceSchedule::class,
         Commands\UpdateAttemptPayment::class,
+        Commands\UpdatePendingPayment::class,
     ];
 
     protected function schedule(Schedule $schedule)
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('maintenance:schedule')->hourly();
         $schedule->command('backup:clean')->daily()->at('00:30');
         $schedule->command('update:attempt')->daily()->at('01:00');
+        $schedule->command('update:pending')->daily()->at('02:00');
         $schedule->command('backup:run --only-files')->daily()->at('00:00');
     }
 
