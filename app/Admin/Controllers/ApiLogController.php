@@ -12,7 +12,7 @@ use App\Models\User;
 
 class ApiLogController extends AdminController
 {
-    protected $title = 'Api Logs';
+    protected $title = 'API Request Logs';
 
     protected function grid()
     {
