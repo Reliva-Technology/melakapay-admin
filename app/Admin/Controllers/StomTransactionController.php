@@ -39,7 +39,7 @@ class StomTransactionController extends AdminController
         
         });
         $grid->column('modified', __('Payment Date/Time'))->filter('range', 'date');
-        $grid->column('agency.agency_name', __('Agency'));
+        $grid->column('ebayar.agency_name', __('Agency'));
         $grid->column('receipt_no', __('Receipt No.'));
         $grid->amount()->display(function ($amount) {
             return number_format($amount,2);
@@ -67,7 +67,7 @@ class StomTransactionController extends AdminController
                     'fpx1' => 'FPX Corporate'
                 ]
             );
-            $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
+            $filter->equal('agency_id', __('Agency'))->select(AgencyEbayar::all()->pluck('agency_name','id'));
         
         });
 
@@ -75,7 +75,6 @@ class StomTransactionController extends AdminController
             $actions->disableEdit()->disableDelete();
             $actions->add(new GetTransactionFromEpic);
             $actions->add(new RegenerateRecipt);
-            $actions->add(new GetTransactionFromZakat);
         });
 
         $grid->disableCreateButton();
@@ -111,7 +110,7 @@ class StomTransactionController extends AdminController
         });
 
         $show->field('id', __('ID'));
-        $show->field('agency.agency_name', __('Agency'));
+        $show->field('ebayar.agency_name', __('Agency'));
         $show->field('account_id', __('Account ID'));
         $show->amount()->as(function ($amount) {
             return number_format($amount,2);
