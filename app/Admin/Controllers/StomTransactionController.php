@@ -17,7 +17,7 @@ use App\Admin\Actions\Transaction\RegenerateRecipt;
 use Illuminate\Support\Facades\Http;
 Use Encore\Admin\Admin;
 
-class TransactionController extends AdminController
+class StomTransactionController extends AdminController
 {
     protected $title = 'STOM Transactions';
 
