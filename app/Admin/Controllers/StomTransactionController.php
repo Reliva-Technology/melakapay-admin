@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Agency;
+use App\Models\AgencyEbayar;
 use App\Models\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
