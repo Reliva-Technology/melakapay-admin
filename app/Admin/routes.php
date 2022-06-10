@@ -41,6 +41,7 @@ Route::group([
     $router->resource('ebayar-transactions', EbayarTransactionController::class);
     $router->resource('update-payments', UpdatePaymentController::class);
     $router->resource('api-logs', ApiLogController::class);
+    $router->resource('stom-transactions', StomTransactionController::class);
 
     $router->get('/api/service','SchedulerController@service');
 

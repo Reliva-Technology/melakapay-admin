@@ -19,6 +19,11 @@ class Transaction extends Model
         return $query->where('agency','LIKE','%-app%');
     }
 
+    public function scopeStom($query)
+    {
+        return $query->where('agency','=','stom');
+    }
+
     public function scopeToday($query)
     {
         $start = Carbon::now()->startOfDay();
