@@ -14,7 +14,7 @@ use DB;
 use Carbon\Carbon;
 use App\Admin\Actions\Transaction\GetTransactionFromEpic;
 use App\Admin\Actions\Transaction\GetTransactionFromZakat;
-use App\Admin\Actions\Transaction\RegenerateRecipt;
+use App\Admin\Actions\Transaction\RegenerateReceiptStom;
 use Illuminate\Support\Facades\Http;
 Use Encore\Admin\Admin;
 
@@ -75,7 +75,7 @@ class StomTransactionController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableEdit()->disableDelete();
             $actions->add(new GetTransactionFromEpic);
-            $actions->add(new RegenerateRecipt);
+            $actions->add(new RegenerateReceiptStom);
         });
 
         $grid->disableCreateButton();

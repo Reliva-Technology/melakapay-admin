@@ -40,6 +40,38 @@ class SetUsernameAsPassword extends RowAction
         $model['new_password'] = $password;
         Notification::send($model, new UsernamePasswordReset($model));
 
+        # user details
+        $user_details = \DB::table('user_details')
+            ->where([
+                'id_no' => $model['username']
+            ])
+            ->first();
+
+        if(!$user_details) return $this->response()->error('This user does not hava a complete user profile.');
+
+        # send SMS only if no phone exist
+        if(isset($user_details->phone_no)){
+            $phone_no = $user_details->phone_no;
+        } else {
+            $phone_no = NULL;
+        }
+
+        if($phone_no != NULL){
+
+            $data = [
+                'user_id' => $user->id,
+                'phone_number' => $phone_no,
+                'password' => $model['username'],
+                'timestamp' => Carbon::now()
+            ];
+
+            try{
+                send_sms($data);
+            } catch(ValidatorException $e){
+                Log::error('Failed to send SMS. Error:'.$e);
+            }
+        }
+
         return $this->response()->success('Temporary password set successfully.');
     }
 

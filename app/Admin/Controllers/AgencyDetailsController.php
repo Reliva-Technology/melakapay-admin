@@ -31,7 +31,7 @@ class AgencyDetailsController extends AdminController
 
         $grid->column('id', __('ID'))->sortable();
         $grid->column('agency.agency_name', __('Agency'))->sortable();
-        $grid->column('logo', __('Logo'))->image();
+        $grid->column('url', __('URL'));
         $grid->filter(function($filter){
 
             // Remove the default id filter
@@ -81,8 +81,7 @@ class AgencyDetailsController extends AdminController
         $form->select('agency_id', __('Agency'))
             ->options(Agency::all()->pluck('agency_name','id'))
             ->required();
-        //$form->hidden('slug');
-        //$form->hidden('agency');
+        $form->hidden('slug');
         $form->summernote('description', __('Description'));
         $form->image('logo', __('Logo'));
         $form->url('url', __('URL'));

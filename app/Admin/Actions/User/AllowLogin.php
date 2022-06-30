@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Notification;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class AllowLogin extends RowAction
 {
@@ -33,13 +34,13 @@ class AllowLogin extends RowAction
         }
 
         # ebayar user details
-        $ebayar_user_details = \DB::table('user_details')
+        $user_details = \DB::table('user_details')
             ->where([
                 'id_no' => $model['username']
             ])
             ->first();
 
-        if(!$ebayar_user_details) return $this->response()->error('This user does not hava a complete user profile.');
+        if(!$user_details) return $this->response()->error('This user does not hava a complete user profile.');
 
         # update ebayar password
         $ebayar_user = \DB::table('user')
@@ -51,8 +52,8 @@ class AllowLogin extends RowAction
 
         # duplicate user into Laravel DB
         $user = new User;
-        $user->name = $ebayar_user_details->full_name;
-        $user->email = $ebayar_user_details->email;
+        $user->name = $user_details->full_name;
+        $user->email = $user_details->email;
         $user->username = $model['username'];
         $user->device_token = \Str::random(40);
         $user->password = Hash::make($model['username']);
@@ -62,6 +63,29 @@ class AllowLogin extends RowAction
         # Send e-mail notification
         $model['new_password'] = $model['username'];
         Notification::send($user, new UserAllowedLogin($user));
+
+        # send SMS only if no phone exist
+        if(isset($user_details->phone_no)){
+            $phone_no = $user_details->phone_no;
+        } else {
+            $phone_no = NULL;
+        }
+
+        if($phone_no != NULL){
+
+            $data = [
+                'user_id' => $user->id,
+                'phone_number' => $phone_no,
+                'password' => $model['username'],
+                'timestamp' => Carbon::now()
+            ];
+
+            try{
+                send_sms($data);
+            } catch(ValidatorException $e){
+                Log::error('Failed to send SMS. Error:'.$e);
+            }
+        }
 
         return $this->response()->success('User has been set to login to MelakaPay successfully.');
     }

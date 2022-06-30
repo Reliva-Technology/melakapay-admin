@@ -9,6 +9,7 @@ use App\Notifications\UserPasswordReset;
 use Illuminate\Support\Facades\Notification;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ResetPassword extends RowAction
 {
@@ -25,7 +26,7 @@ class ResetPassword extends RowAction
     public function handle(Model $model)
     {
         # update local password
-        $password = \Str::random(12);
+        $password = rand (100000000000,999999999999);
         $model->password = \Hash::make($password);
         $model->save();
 
@@ -40,6 +41,38 @@ class ResetPassword extends RowAction
         # Send e-mail notification
         $model['new_password'] = $password;
         Notification::send($model, new UserPasswordReset($model));
+
+        # user details
+        $user_details = \DB::table('user_details')
+            ->where([
+                'id_no' => $model['username']
+            ])
+            ->first();
+
+        if(!$user_details) return $this->response()->error('This user does not hava a complete user profile.');
+
+        # send SMS only if no phone exist
+        if(isset($user_details->phone_no)){
+            $phone_no = $user_details->phone_no;
+        } else {
+            $phone_no = NULL;
+        }
+
+        if($phone_no != NULL){
+
+            $data = [
+                'user_id' => $user->id,
+                'phone_number' => $phone_no,
+                'password' => $model['username'],
+                'timestamp' => Carbon::now()
+            ];
+
+            try{
+                send_sms($data);
+            } catch(ValidatorException $e){
+                Log::error('Failed to send SMS. Error:'.$e);
+            }
+        }
 
         return $this->response()->success('Password reset successfully.');
     }
