@@ -31,7 +31,8 @@ return [
                     base_path('vendor'),
                     base_path('node_modules'),
                     '/var/www/html/e-bayar-api/vendor',
-                    '/var/www/html/e-bayar-api/node_modules'
+                    '/var/www/html/e-bayar-api/node_modules',
+                    '/var/www/html/e-bayar-api/storage/logs'
                 ],
 
                 /*
@@ -42,7 +43,7 @@ return [
                 /*
                  * Determines if it should avoid unreadable folders.
                  */
-                'ignore_unreadable_directories' => false,
+                'ignore_unreadable_directories' => true,
 
                 /*
                  * This path is used to make directories in resulting zip-file relative
