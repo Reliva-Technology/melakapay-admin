@@ -153,6 +153,49 @@ class UserController extends AdminController
             $transaction->disableCreateButton();
         });
 
+        $show->stom('STOM Transaction', function ($stom) {
+
+            $stom->setResource('/manage/admin/stom-transactions');
+        
+            $stom->id(__('ID'));
+            $stom->ebayar()->agency_name('Agency');
+            $stom->account_id(__('Account ID'));
+            $stom->amount(__('Amount'));
+            $stom->payment_type(__('Payment mode'));
+            $stom->status(__('Status'))->using(['0' => 'Failed', '1' => 'Success']);
+            $stom->epx_trns_no(__('EPS Transaction ID'));
+            $stom->receipt_no(__('Receipt No'));
+            $stom->modified(__('Created at'));
+
+            $stom->actions(function ($actions) {
+                $actions->add(new GetTransactionFromEpic)->disableEdit()->disableDelete();
+            });
+
+            $stom->filter(function($filter){
+
+                // Remove the default id filter
+                $filter->disableIdFilter();
+            
+                // Add a column filter
+                $filter->between('modified', 'Date Range')->date();
+                $filter->like('epx_trns_no', 'EPS Transaction ID');
+                $filter->like('receipt_no', 'Receipt No');
+                $filter->equal('status', 'Status')->radio(
+                    [
+                        '' => 'All',
+                        1 => 'Success',
+                        0 => 'Attempt Payment',
+                        2 => 'Failed',
+                        3 => 'Pending'
+                    ]
+                );
+                $filter->equal('agency_id', __('Agency'))->select(Agency::all()->pluck('agency_name','id'));
+            
+            });
+
+            $stom->disableCreateButton();
+        });
+
         $show->feedback('Feedback', function ($feedback) {
 
             $feedback->setResource('/manage/admin/feedback');

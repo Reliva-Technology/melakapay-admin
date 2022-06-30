@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class)->app();
     }
 
+    public function stom()
+    {
+        return $this->hasMany(Transaction::class)->stom();
+    }
+
     public function feedback()
     {
         return $this->hasMany(Feedback::class);
