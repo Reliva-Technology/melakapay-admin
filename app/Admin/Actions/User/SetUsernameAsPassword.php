@@ -9,6 +9,7 @@ use App\Notifications\UsernamePasswordReset;
 use Illuminate\Support\Facades\Notification;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use App\Models\User;
 
 class SetUsernameAsPassword extends RowAction
 {
@@ -39,6 +40,9 @@ class SetUsernameAsPassword extends RowAction
         # Send e-mail notification
         $model['new_password'] = $password;
         Notification::send($model, new UsernamePasswordReset($model));
+
+        # get user
+        $user = User::where('username', $model['username'])->first();
 
         # user details
         $user_details = \DB::table('user_details')
