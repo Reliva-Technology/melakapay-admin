@@ -21,7 +21,7 @@ class Transaction extends Model
 
     public function scopeStom($query)
     {
-        return $query->where('agency','=','stom');
+        return $query->where('agency','=','stom')->where('id', '>', '589477'); // staty of live melakapay transaction ID
     }
 
     public function scopeToday($query)
