@@ -42,16 +42,16 @@ class GetTransactionFromEpic extends RowAction
 
                     $data = json_decode($response->body(),true);
 
-                    if(isset($result['STATUS'])){
+                    if(isset($data['STATUS'])){
 
                         if($data['STATUS'] == '1'){
 
                             # post data to response page
                             if($data['agency'] == 'stom'){
-                                $result['source'] = 'admin';
-                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
+                                $data['source'] = 'admin';
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $data);
                             } else {
-                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
                             }
 
                             # log attempt in DB
