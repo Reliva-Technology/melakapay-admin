@@ -42,23 +42,30 @@ class GetTransactionFromEpic extends RowAction
 
                     $data = json_decode($response->body(),true);
 
-                    if($data['STATUS'] == '1'){
+                    if(isset($result['STATUS'])){
 
-                        # post data to response page
-                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
+                        if($data['STATUS'] == '1'){
 
-                        # log attempt in DB
-                        UpdatePayment::updateOrCreate([
-                            "eps_id" => $epic->id,
-                            "transaction_id" => $epic->merchant_trans_id,
-                            "eps_status" => $epic->eps_status,
-                            "response" => $update->body()
-                        ]);
-                        
-                        return $this->response()->success($update->body())->refresh();
-                        
-                    } else {
-                        return $this->response()->warning('Error retrieving this data from EPIC.');
+                            # post data to response page
+                            if($data['agency'] == 'stom'){
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
+                            } else {
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
+                            }
+
+                            # log attempt in DB
+                            UpdatePayment::updateOrCreate([
+                                "eps_id" => $epic->id,
+                                "transaction_id" => $epic->merchant_trans_id,
+                                "eps_status" => $epic->eps_status,
+                                "response" => $update->body()
+                            ]);
+                            
+                            return $this->response()->success($update->body())->refresh();
+                            
+                        } else {
+                            return $this->response()->warning('Error retrieving this data from EPIC.');
+                        }
                     }
                 } else {
                     return $this->response()->warning('No response from EPIC.');

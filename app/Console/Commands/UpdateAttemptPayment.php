@@ -58,22 +58,29 @@ class UpdateAttemptPayment extends Command
 
                         $data = json_decode($response->body(),true);
 
-                        if($data['STATUS'] == '1'){
+                        if(isset($data['STATUS'])){
 
-                            # post data to response page
-                            $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
+                            if($data['STATUS'] == '1'){
 
-                            # log attempt in DB
-                            UpdatePayment::updateOrCreate([
-                                "eps_id" => $epic->id,
-                                "transaction_id" => $epic->merchant_trans_id,
-                                "eps_status" => $epic->eps_status,
-                                "response" => $update->body()
-                            ]);
+                                # post data to response page
+                                if($data['agency'] == 'stom'){
+                                    $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
+                                } else {
+                                    $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
+                                }
 
-                            Log::info('Save or create log update for EPS ID:'.$epic->id);
+                                # log attempt in DB
+                                UpdatePayment::updateOrCreate([
+                                    "eps_id" => $epic->id,
+                                    "transaction_id" => $epic->merchant_trans_id,
+                                    "eps_status" => $epic->eps_status,
+                                    "response" => $update->body()
+                                ]);
 
-                            sleep(30);
+                                Log::info('Save or create log update for EPS ID:'.$epic->id);
+
+                                sleep(10);
+                            }
                             
                         } else {
                             Log::info('Status '.$epic->eps_status.' for EPS ID:'.$epic->id);

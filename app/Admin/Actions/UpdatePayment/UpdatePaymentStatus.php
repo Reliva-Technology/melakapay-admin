@@ -39,19 +39,25 @@ class UpdatePaymentStatus extends Action
 
                     $result = json_decode($response->body(),true);
 
-                    if($result['STATUS'] == '1'){
+                    if(isset($result['STATUS'])){
 
-                        # post data to response page
-                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
+                        if($result['STATUS'] == '1'){
 
-                        # log attempt in DB
-                        UpdatePayment::updateOrCreate([
-                            "eps_id" => $epic->id,
-                            "transaction_id" => $epic->merchant_trans_id,
-                            "eps_status" => $epic->eps_status,
-                            "response" => $update->body()
-                        ]);
-                        
+                            # post data to response page
+                            if($result['agency'] == 'stom'){
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
+                            } else {
+                                $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
+                            }
+
+                            # log attempt in DB
+                            UpdatePayment::updateOrCreate([
+                                "eps_id" => $epic->id,
+                                "transaction_id" => $epic->merchant_trans_id,
+                                "eps_status" => $epic->eps_status,
+                                "response" => $update->body()
+                            ]);
+                        }
                     }
                 }
             }
