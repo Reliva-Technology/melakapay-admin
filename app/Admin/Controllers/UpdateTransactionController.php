@@ -37,7 +37,9 @@ class UpdateTransactionController extends AdminController
                 [
                     'Cukai Tanah' => 'Cukai Tanah',
                     'Cukai Petak' => 'Cukai Petak',
-                    'Carian Persendirian' => 'Carian Persendirian'
+                    'Carian Persendirian' => 'Carian Persendirian',
+                    'Dokumen Sebutharga' => 'Dokumen Sebutharga',
+                    'Langganan' => 'Langganan'
                 ]
             );
             $filter->equal('receipt_no', 'Receipt No.');
