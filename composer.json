@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "barryvdh/laravel-debugbar": "^3.7",
         "codedredd/laravel-soap": "*",
         "encore/laravel-admin": "^1.8",
         "fadlisaad/ext-env-manager": "^0.1.1",
