@@ -44,6 +44,7 @@ class RegenerateReceiptStom extends RowAction
                     unlink('/var/www/html/e-bayar-api/storage/app/public/rasmi-'.$model->id.'.pdf');
 
                     # post data to response page
+                    $data['source'] = 'admin';
                     $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $data);
 
                     # send new receipt to user

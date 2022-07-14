@@ -48,6 +48,7 @@ class GetTransactionFromEpic extends RowAction
 
                             # post data to response page
                             if($data['agency'] == 'stom'){
+                                $result['source'] = 'admin';
                                 $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
                             } else {
                                 $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
