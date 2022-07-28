@@ -9,6 +9,7 @@ use DB;
 use Log;
 use Exception;
 use Carbon\Carbon;
+use App\Models\Transaction;
 
 class UpdatePendingPayment extends Command
 {
@@ -23,10 +24,8 @@ class UpdatePendingPayment extends Command
 
     public function handle()
     {
-        $dataEpic = DB::connection('epic')
-            ->table('eps_transactions')
-            ->where('eps_status', 3) // pending
-            ->where('payment_datetime', '=>', Carbon::now()->subDays(7))
+        $dataEpic = Transaction::where('status', 3) // pending
+            ->where('date_payment', '=>', Carbon::now()->subDays(7))
             ->get();
 
         if($dataEpic){
