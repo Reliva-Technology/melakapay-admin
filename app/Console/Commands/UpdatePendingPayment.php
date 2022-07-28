@@ -23,78 +23,75 @@ class UpdatePendingPayment extends Command
 
     public function handle()
     {
-        try {
-            $dataEpic = DB::connection('epic')
+        $dataEpic = DB::connection('epic')
             ->table('eps_transactions')
-            ->where('eps_status', 2) // pending
+            ->where('eps_status', 3) // pending
             ->whereBetween('payment_datetime', 
                 [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]
             )
             ->get();
 
-            if($dataEpic){
-            
-                foreach($dataEpic as $epic){
+        if($dataEpic){
 
-                    # check if pending already logged
-                    $logged = UpdatePayment::where('eps_id', $epic->id)->first();
+            Log::info('Got transaction to be update');
+        
+            foreach($dataEpic as $epic){
 
-                    if($logged){
-                        Log::info('No pending payment transaction require update for EPS ID:'.$epic->id);
-                    } else {
+                # check if pending already logged
+                $logged = UpdatePayment::where('eps_id', $epic->id)->first();
 
-                        # generate receipt
-                        if($epic->receipt_no != NULL)
-                        {
-                            $url = env('EPAYMENT_REQUERY_URL').$epic->id;
-                            
-                            $response = Http::get($url);
-                            $response->throw();
+                if($logged){
+                    Log::info('No pending payment transaction require update for EPS ID:'.$epic->id);
+                } else {
 
-                            if($response){
+                    # generate receipt
+                    if($epic->receipt_no != NULL)
+                    {
+                        $url = env('EPAYMENT_REQUERY_URL').$epic->id;
+                        
+                        $response = Http::get($url);
+                        $response->throw();
 
-                                $data = json_decode($response->body(),true);
+                        if($response){
 
-                                if(isset($data['STATUS'])){
+                            $data = json_decode($response->body(),true);
 
-                                    if($data['STATUS'] == '1'){
+                            if(isset($data['STATUS'])){
 
-                                        # post data to response page
-                                        if($data['agency'] == 'stom'){
-                                            $result['source'] = 'admin';
-                                            $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
-                                        } else {
-                                            $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
-                                        }
+                                if($data['STATUS'] == '1'){
 
-                                        # log pending in DB
-                                        UpdatePayment::updateOrCreate([
-                                            "eps_id" => $epic->id,
-                                            "transaction_id" => $epic->merchant_trans_id,
-                                            "eps_status" => $epic->eps_status,
-                                            "response" => $update->body()
-                                        ]);
-
-                                        Log::info('Save or create log update for EPS ID:'.$epic->id);
-
-                                        sleep(10);
+                                    # post data to response page
+                                    if($data['agency'] == 'stom'){
+                                        $result['source'] = 'admin';
+                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $result);
+                                    } else {
+                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $result);
                                     }
-                                    
-                                } else {
-                                    Log::info('Status '.$epic->eps_status.' for EPS ID:'.$epic->id);
+
+                                    # log pending in DB
+                                    UpdatePayment::updateOrCreate([
+                                        "eps_id" => $epic->id,
+                                        "transaction_id" => $epic->merchant_trans_id,
+                                        "eps_status" => $epic->eps_status,
+                                        "response" => $update->body()
+                                    ]);
+
+                                    Log::info('Save or create log update for EPS ID:'.$epic->id);
+
+                                    sleep(10);
                                 }
+                                
                             } else {
-                                Log::info('No response from EPIC.');
+                                Log::info('Status '.$epic->eps_status.' for EPS ID:'.$epic->id);
                             }
+                        } else {
+                            Log::info('No response from EPIC.');
                         }
                     }
                 }
-            } else {
-                Log::info('No pending payment transaction require status update');
             }
-            
-        } catch (Exception $e) {
-            Log::error($e);
+        } else {
+            Log::info('No pending payment transaction require status update');
         }
     }
 }

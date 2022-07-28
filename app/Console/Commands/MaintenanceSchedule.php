@@ -30,7 +30,7 @@ class MaintenanceSchedule extends Command
                 $update = Agency::find($data['agency_id']);
                 $update->enable = $data['status'];
                 $update->save();
-                echo 'Agency '.$data['agency_id'].' has been updated';
+                echo 'Agency '.$data['agency_id'].' has been updated to status '.$data['status'];
             }
         } else {
             echo 'No matching schedule';
