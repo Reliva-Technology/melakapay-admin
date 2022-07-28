@@ -26,9 +26,7 @@ class UpdatePendingPayment extends Command
         $dataEpic = DB::connection('epic')
             ->table('eps_transactions')
             ->where('eps_status', 3) // pending
-            ->whereBetween('payment_datetime', 
-                [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]
-            )
+            ->where('payment_datetime', '=>', Carbon::now()->subDays(7))
             ->get();
 
         if($dataEpic){
