@@ -33,7 +33,7 @@ class UpdatePendingPayment extends Command
 
         if($dataEpic){
 
-            Log::info('Got transaction to be update');
+            Log::info('Got '.$dataEpic->count().' transactions to be update');
         
             foreach($dataEpic as $epic){
 
