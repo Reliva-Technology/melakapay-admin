@@ -36,7 +36,7 @@ class UpdatePendingPayment extends Command
 
                 $epic = DB::connection('epic')
                     ->table('eps_transactions')
-                    ->where('merchant_trans_id', $transaction->id)
+                    ->where('merchant_trans_id', $transaction['id'])
                     ->first();
 
                 # check if pending already logged
