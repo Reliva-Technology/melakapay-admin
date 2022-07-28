@@ -59,10 +59,10 @@ class UpdatePendingPayment extends Command
 
                                     # post data to response page
                                     if($data['agency'] == 'stom'){
-                                        $response['source'] = 'admin';
-                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $response);
+                                        $data['source'] = 'admin';
+                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'stom/response', $data);
                                     } else {
-                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $response);
+                                        $update = Http::asForm()->post(env('MELAKAPAY_URL').'payment/fpx/response', $data);
                                     }
 
                                     # log pending in DB
