@@ -30,7 +30,7 @@ class UpdatePendingPayment extends Command
 
         if($transactions){
 
-            Log::info('Got '.$transaction->count().' transactions to be update');
+            Log::info('Got '.$transactions->count().' transactions to be update');
         
             foreach($transactions as $transaction){
 
