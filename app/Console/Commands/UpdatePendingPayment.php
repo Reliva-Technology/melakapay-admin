@@ -39,17 +39,19 @@ class UpdatePendingPayment extends Command
                     ->where('merchant_trans_id', $transaction->id)
                     ->first();
 
+                dd($epic);
+
                 # check if pending already logged
-                $logged = UpdatePayment::where('eps_id', $epic['id'])->first();
+                $logged = UpdatePayment::where('eps_id', $epic->id)->first();
 
                 if($logged){
-                    Log::info('No pending payment transaction require update for EPS ID:'.$epic['id']);
+                    Log::info('No pending payment transaction require update for EPS ID:'.$epic->id);
                 } else {
 
                     # generate receipt
                     if($epic->receipt_no != NULL)
                     {
-                        $url = env('EPAYMENT_REQUERY_URL').$epic['id'];
+                        $url = env('EPAYMENT_REQUERY_URL').$epic->id;
                         
                         $response = Http::get($url);
                         $response->throw();
@@ -72,19 +74,19 @@ class UpdatePendingPayment extends Command
 
                                     # log pending in DB
                                     UpdatePayment::updateOrCreate([
-                                        "eps_id" => $epic['id'],
-                                        "transaction_id" => $epic['merchant_trans_id'],
-                                        "eps_status" => $epic['eps_status'],
+                                        "eps_id" => $epic->id,
+                                        "transaction_id" => $epic->merchant_trans_id,
+                                        "eps_status" => $epic->eps_status,
                                         "response" => $update->body()
                                     ]);
 
-                                    Log::info('Save or create log update for EPS ID:'.$epic['id']);
+                                    Log::info('Save or create log update for EPS ID:'.$epic->id);
 
                                     sleep(10);
                                 }
                                 
                             } else {
-                                Log::info('Status '.$epic['eps_status'].' for EPS ID:'.$epic['id']);
+                                Log::info('Status '.$epic->eps_status.' for EPS ID:'.$epic->id);
                             }
                         } else {
                             Log::info('No response from EPIC.');
