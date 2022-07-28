@@ -86,7 +86,7 @@ class UpdatePendingPayment extends Command
                         }
                     }
                 } else {
-                    Log::info('No matching transaction for ID '.$transactions->id);
+                    Log::info('No matching transaction for ID '.$transaction->id);
                 }
             }
         } else {
