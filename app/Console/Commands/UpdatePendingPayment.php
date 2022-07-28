@@ -24,15 +24,20 @@ class UpdatePendingPayment extends Command
 
     public function handle()
     {
-        $dataEpic = Transaction::where('status', 3) // pending
-            ->where('date_payment', '=>', Carbon::now()->subDays(7))
+        $transaction = Transaction::where('status', 3) // pending
+            ->whereDate('date_payment', '=>', Carbon::today()->subDays(7))
             ->get();
 
-        if($dataEpic){
+        if($transaction){
 
-            Log::info('Got '.$dataEpic->count().' transactions to be update');
+            Log::info('Got '.$transaction->count().' transactions to be update');
         
-            foreach($dataEpic as $epic){
+            foreach($transaction as $data){
+
+                $epic = DB::connection('epic')
+                    ->table('eps_transactions')
+                    ->where('merchant_trans_id', $transaction->id)
+                    ->first();
 
                 # check if pending already logged
                 $logged = UpdatePayment::where('eps_id', $epic->id)->first();
